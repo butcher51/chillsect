@@ -1,30 +1,9 @@
-import {
-	MeshLambertMaterial,
-	Scene,
-	OrthographicCamera,
-	WebGLRenderer,
-	Object3D,
-	Raycaster,
-	Plane,
-	Vector3,
-	RepeatWrapping,
-	Mesh,
-	AdditiveBlending,
-	PointLight,
-	SpotLight,
-	MeshBasicMaterial,
-	PlaneBufferGeometry
-} from "three";
+import { Scene, OrthographicCamera, WebGLRenderer, Vector3 } from "three";
+
+import getCameraSize from "./getCameraSize";
 
 var Scene_ = function() {
 	this.scene = new Scene();
-
-	var getCameraSize = function() {
-		return {
-			width: window.innerWidth,
-			height: window.innerHeight
-		};
-	};
 
 	this.cameraSize = getCameraSize();
 	this.cameraFactor = 2;
