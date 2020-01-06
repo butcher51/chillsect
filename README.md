@@ -14,7 +14,8 @@ https://www.youtube.com/watch?v=8X043950tkA
 pályák között reload for memory cleaning?
 
 szörnyek hangot adjanak ha érzékelik a közelséget
-passiv lövöldözős szörny
+passziv lövöldözős szörny
+pajzs a hajó elé amivel lehet zúzni
 
 másodlagos fegyverek:
 követős rakéta
