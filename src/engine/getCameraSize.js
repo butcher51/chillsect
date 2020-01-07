@@ -2,8 +2,8 @@ var getCameraSize = function() {
 	var resolution = window.devicePixelRatio;
 	var w = window.innerWidth;
 	var h = window.innerHeight;
-	if (h / w < 0.6) {
-		w = h / 0.6;
+	if (h / w < 0.5625) {
+		w = h / 0.5625;
 	}
 	var w2 = Math.round(w * resolution);
 	var h2 = Math.round(h * resolution);
