@@ -1,4 +1,5 @@
 import CONFIG from "../../config";
+import getCameraSize from "../../engine/getCameraSize";
 
 var ShipConsole = function(state) {
   this.state = state;
@@ -43,7 +44,10 @@ ShipConsole.prototype.renderHtml = function() {
 
   var kyberCrystal = document.createElement("div");
   kyberCrystal.className = "kyberCrystal";
-  kyberCrystal.innerText = this.state.player.kyberCrystal + "/" + this.state.missionController.kyberCrystalList.length;
+  kyberCrystal.innerText =
+    this.state.player.kyberCrystal +
+    "/" +
+    this.state.missionController.kyberCrystalList.length;
   uiWrapper.appendChild(kyberCrystal);
 
   var controlPanelBtn = document.createElement("a");
@@ -56,12 +60,14 @@ ShipConsole.prototype.renderHtml = function() {
   };
 
   var soundBtn = document.createElement("a");
-  soundBtn.className = that.engine.sound === false ? "soundBtn disabled" : "soundBtn";
+  soundBtn.className =
+    that.engine.sound === false ? "soundBtn disabled" : "soundBtn";
   uiWrapper.appendChild(soundBtn);
 
   soundBtn.onclick = function() {
     that.engine.sound = !that.engine.sound;
-    soundBtn.className = that.engine.sound === false ? "soundBtn disabled" : "soundBtn";
+    soundBtn.className =
+      that.engine.sound === false ? "soundBtn disabled" : "soundBtn";
   };
 
   this.money = money;
@@ -81,6 +87,18 @@ ShipConsole.prototype.renderHtml = function() {
   uiWrapper.style.top = "0";
 
   this.tick = 0;
+
+  this.resize();
+};
+
+ShipConsole.prototype.resize = function() {
+  const cameraSize = getCameraSize();
+  const restWidth = (window.innerWidth - cameraSize.width) / 2 + "px";
+  this.kyberCrystal.style.left = restWidth;
+  this.money.style.right = restWidth;
+  window.tw.style.left = restWidth;
+  const stat = document.querySelector("body > div:nth-child(4)");
+  stat.style.right = restWidth;
 };
 
 ShipConsole.prototype.reset = function() {
@@ -124,15 +142,27 @@ ShipConsole.prototype.renderSecondaryWeapons = function(index) {
   );
 };
 
-ShipConsole.prototype.renderWeaponsCommon = function(weaponType, clickCallback, index) {
+ShipConsole.prototype.renderWeaponsCommon = function(
+  weaponType,
+  clickCallback,
+  index
+) {
   this[weaponType].innerHTML = "";
   if (index) {
-    for (var j = 0, al = this[weaponType].querySelectorAll("a"), jl = al.length; j < jl; j++) {
+    for (
+      var j = 0, al = this[weaponType].querySelectorAll("a"), jl = al.length;
+      j < jl;
+      j++
+    ) {
       al[jl].classList.remove("active");
     }
   }
 
-  for (var i = 0, w = this.state.weapons, l = w[weaponType].length; i < l; i++) {
+  for (
+    var i = 0, w = this.state.weapons, l = w[weaponType].length;
+    i < l;
+    i++
+  ) {
     var a = document.createElement("a");
     var span = document.createElement("span");
     if (i === index) {
@@ -170,8 +200,15 @@ ShipConsole.prototype.update = function(ship, force) {
     }
   }
 
-  this.energyBar.style.width = Math.max(2, Math.round((ship.energy / CONFIG.ENERGY_MANAGEMENT.ENERGY_MAX_VALUE) * 622)) + "px";
-  this.energyBar.style.backgroundColor = ship.energy > CONFIG.ENERGY_MANAGEMENT.WARNING ? "#003cff" : "#dd2831";
+  this.energyBar.style.width =
+    Math.max(
+      2,
+      Math.round(
+        (ship.energy / CONFIG.ENERGY_MANAGEMENT.ENERGY_MAX_VALUE) * 622
+      )
+    ) + "px";
+  this.energyBar.style.backgroundColor =
+    ship.energy > CONFIG.ENERGY_MANAGEMENT.WARNING ? "#003cff" : "#dd2831";
 
   //
   //var x = Math.round(this.state.ship.body.position[0] / PROCEDURAL_BLOCK_SIZE);
