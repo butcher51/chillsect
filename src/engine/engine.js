@@ -1,18 +1,18 @@
 import {
-	MeshLambertMaterial,
-	AudioListener,
-	Object3D,
-	AnimationMixer,
-	Raycaster,
-	Plane,
-	Vector3,
-	RepeatWrapping,
-	Mesh,
-	AdditiveBlending,
-	PointLight,
-	SpotLight,
-	MeshBasicMaterial,
-	PlaneBufferGeometry
+  MeshLambertMaterial,
+  AudioListener,
+  Object3D,
+  AnimationMixer,
+  Raycaster,
+  Plane,
+  Vector3,
+  RepeatWrapping,
+  Mesh,
+  AdditiveBlending,
+  PointLight,
+  SpotLight,
+  MeshBasicMaterial,
+  PlaneBufferGeometry
 } from "three";
 import { World } from "p2";
 import TWEEN from "tween.js";
@@ -23,108 +23,109 @@ import Controls from "./Controls";
 import Stats from "./stats.min.js";
 
 var Engine = function() {
-	this.scene = new Scene();
+  this.scene = new Scene();
 
-	this.states = new StateManager(this);
-	this.loader = new Loader(this);
-	this.controls = new Controls(this);
+  this.states = new StateManager(this);
+  this.loader = new Loader(this);
+  this.controls = new Controls(this);
 
-	this.mixer = new AnimationMixer(this.scene);
+  this.mixer = new AnimationMixer(this.scene);
 
-	this.audioListener = new AudioListener();
-	this.scene.camera.add(this.audioListener);
+  this.audioListener = new AudioListener();
+  this.scene.camera.add(this.audioListener);
 
-	this.world = new World();
-	this.world.applyGravity = false;
-	this.world.applySpringForces = false;
-	this.world.applyDamping = false;
-	this.world.solver.iterations = 1;
+  this.world = new World();
+  this.world.applyGravity = false;
+  this.world.applySpringForces = false;
+  this.world.applyDamping = false;
+  this.world.solver.iterations = 1;
 
-	this.root = new Object3D();
-	this.scene.scene.add(this.root);
+  this.root = new Object3D();
+  this.scene.scene.add(this.root);
 
-	this.sound = true;
+  this.sound = true;
 
-	window.addEventListener("resize", () => {
-		this.scene.resize();
-		this.states.resize();
-	});
+  window.addEventListener("resize", () => {
+    this.scene.resize();
+    this.states.resize();
+  });
 
-	this.paused = false;
+  this.paused = false;
 
-	this.i = 0;
+  this.i = 0;
 };
 
 Engine.prototype = {
-	fixedTimeStep: 1 / 60,
-	delta: undefined,
-	time: undefined,
-	lastTime: undefined,
-	initStats: function() {
-		this.stats = new Stats();
-		this.stats.showPanel(1);
-		document.body.appendChild(this.stats.domElement);
+  fixedTimeStep: 1 / 60,
+  delta: undefined,
+  time: undefined,
+  lastTime: undefined,
+  initStats: function() {
+    this.stats = new Stats();
+    this.stats.showPanel(1);
+    document.body.appendChild(this.stats.domElement);
 
-		this.stats.domElement.style.left = "";
-		this.stats.domElement.style.right = "0px";
-		this.stats.domElement.style.top = "";
-		this.stats.domElement.style.bottom = "0px";
-	},
-	reset: function() {
-		delete this.world;
-		this.world = new World();
-		this.world.applyGravity = false;
-		this.world.applySpringForces = false;
-		this.world.applyDamping = false;
-		this.world.solver.iterations = 1;
+    this.stats.domElement.style.display = "none";
+    this.stats.domElement.style.left = "";
+    this.stats.domElement.style.right = "0px";
+    this.stats.domElement.style.top = "";
+    this.stats.domElement.style.bottom = "0px";
+  },
+  reset: function() {
+    delete this.world;
+    this.world = new World();
+    this.world.applyGravity = false;
+    this.world.applySpringForces = false;
+    this.world.applyDamping = false;
+    this.world.solver.iterations = 1;
 
-		while (this.scene.scene.children.length > 0) {
-			this.scene.scene.remove(this.scene.scene.children[0]);
-		}
+    while (this.scene.scene.children.length > 0) {
+      this.scene.scene.remove(this.scene.scene.children[0]);
+    }
 
-		this.root = new Object3D();
-		this.scene.scene.add(this.root);
-	},
-	add: function(gameObject) {
-		this.root.add(gameObject);
-	},
-	remove: function(gameObject) {
-		this.root.remove(gameObject);
-	},
-	pause: function() {
-		this.paused = true;
-	},
-	resume: function() {
-		this.paused = false;
-	},
-	update: function(time) {
-		if (this.paused === true) {
-			return;
-		}
+    this.root = new Object3D();
+    this.scene.scene.add(this.root);
+  },
+  add: function(gameObject) {
+    this.root.add(gameObject);
+  },
+  remove: function(gameObject) {
+    this.root.remove(gameObject);
+  },
+  pause: function() {
+    this.paused = true;
+  },
+  resume: function() {
+    this.paused = false;
+  },
+  update: function(time) {
+    if (this.paused === true) {
+      return;
+    }
 
-		if (this.stats) this.stats.begin();
+    if (this.stats) this.stats.begin();
 
-		this.time = time / 1000;
-		this.delta = 0;
-		if (this.time !== undefined && this.lastTime !== undefined) {
-			this.delta = this.time - this.lastTime;
-		}
+    this.time = time / 1000;
+    this.delta = 0;
+    if (this.time !== undefined && this.lastTime !== undefined) {
+      this.delta = this.time - this.lastTime;
+    }
 
-		// physics
-		this.world.step(this.fixedTimeStep /*, this.delta, 1*/);
+    // physics
+    this.world.step(this.fixedTimeStep /*, this.delta, 1*/);
 
-		// game logic
-		this.states.update();
-		TWEEN.update(this.time);
+    // game logic
+    this.states.update();
+    TWEEN.update(this.time);
 
-		// render
-		this.scene.render();
-		this.mixer.update(this.delta);
+    // render
+    this.scene.render();
+    this.mixer.update(this.delta);
 
-		this.lastTime = this.time;
+    this.lastTime = this.time;
 
-		if (this.stats) this.stats.end();
-	}
+    if (this.stats) this.stats.end();
+  }
 };
 
 export default Engine;

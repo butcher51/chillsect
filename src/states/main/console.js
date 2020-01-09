@@ -88,6 +88,9 @@ ShipConsole.prototype.renderHtml = function() {
 
   this.tick = 0;
 
+  window.tw.style.display = this.engine.stats.domElement.style.display =
+    "block";
+
   this.resize();
 };
 
