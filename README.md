@@ -33,3 +33,5 @@ self desctruct when energy out. Button to control panel with countdown.
 space shop-ok?
 irányitás tutorial, mint valami bevezető a-b pontba5 menj lődd szét ezt azt,
 random events, elhúz valami a képernyőn, furcsa tárgyak stb
+
+zene: copenhagen - orbital
