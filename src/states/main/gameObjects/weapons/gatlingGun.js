@@ -36,6 +36,7 @@ GatlingGun.prototype.initWeapon = function() {
 
 GatlingGun.prototype.shoot = function() {
 	if (this.amount < 1) {
+		this.state.weapons.set(this.weaponIndex - 1);
 		return;
 	}
 	this.shootCommon();
