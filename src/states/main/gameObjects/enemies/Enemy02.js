@@ -1,4 +1,4 @@
-import { Audio, MeshBasicMaterial, Mesh, Object3D, BoxBufferGeometry } from "three";
+import { Audio, MeshBasicMaterial, Mesh, Object3D, CylinderBufferGeometry } from "three";
 import { vec2 } from "p2";
 import CONFIG from "../../../../config";
 import Util from "../../../../util";
@@ -26,7 +26,7 @@ var Enemy02 = function() {
 	//     wrapper.add(mesh);
 	// }
 
-	var mesh = new Mesh(new BoxBufferGeometry(4, 4, 4), Enemy02.material);
+	var mesh = new Mesh(new CylinderBufferGeometry(3, 3, 1, 8), Enemy02.material);
 
 	wrapper.add(mesh);
 
@@ -91,7 +91,7 @@ Enemy02.prototype.initSounds = function() {
 Enemy02.prototype.setAleas = function(aleas) {
 	AbstractEnemy.prototype.setAleas.call(this, aleas);
 
-	this.size = 18 + aleas[2] * 10;
+	this.size = 25; //aleas[2] szabad
 	this.clickSize = (this.size + 100) * (this.size + 100);
 
 	this.hpMax = 10;
@@ -101,10 +101,10 @@ Enemy02.prototype.setAleas = function(aleas) {
 	//this.moveClip.stop();
 	//this.attackClip.stop();
 
-	this.body.shapes[0].radius = this.size;
+	this.body.shapes[0].radius = 35;
 	this.body.shapes[0].updateBoundingRadius();
 
-	this.body.mass = 5;
+	this.body.mass = 200;
 	this.body.updateMassProperties();
 
 	this.children[0].scale.set(this.size, this.size, this.size);
