@@ -1,4 +1,4 @@
-import { Scene, OrthographicCamera, WebGLRenderer, Vector3 } from "three";
+import { Scene, OrthographicCamera, WebGL1Renderer, Vector3 } from "three";
 
 import getCameraSize from "./getCameraSize";
 
@@ -24,7 +24,7 @@ var Scene_ = function() {
 	this.camera.rotateOnAxis(new Vector3(1, 0, 0), 50 * (Math.PI / 180));
 	this.scene.add(this.camera);
 
-	this.renderer = new WebGLRenderer({
+	this.renderer = new WebGL1Renderer({
 		alpha: false,
 		antialias: false,
 		stencil: false,
