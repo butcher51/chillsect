@@ -16,7 +16,7 @@ Ship.prototype.constructor = Ship;
 
 Ship.prototype.accel = 35;
 Ship.prototype.drag = 0.98;
-Ship.prototype.speedLimit = 660;
+Ship.prototype.speedLimit = 660;        
 Ship.prototype.size = 30;
 Ship.prototype.lastModelRotation = 0;
 

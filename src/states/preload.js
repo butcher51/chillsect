@@ -116,7 +116,8 @@ Preload.prototype.commonAssets = {
 	missile1Sound: "sounds/missile1.ogg",
 	starfieldReflection: "textures/starfieldReflection.png",
 	kyberCrystal: "textures/kyberCrystal.png",
-	weaponsTexture: "textures/weapons.png"
+	weaponsTexture: "textures/weapons.png",
+	enemy02Texture: "textures/enemy02.png",
 };
 
 export default Preload;

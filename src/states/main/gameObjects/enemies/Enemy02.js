@@ -1,4 +1,4 @@
-import { Audio, MeshBasicMaterial, Mesh, Object3D, CylinderBufferGeometry } from "three";
+import { Audio, MeshBasicMaterial, Mesh, Object3D, PlaneBufferGeometry } from "three";
 import { vec2 } from "p2";
 import CONFIG from "../../../../config";
 import Util from "../../../../util";
@@ -12,7 +12,8 @@ var Enemy02 = function() {
 	if (!Enemy02.material) {
 		Enemy02.material = new MeshBasicMaterial({
 			color: 0xffffff,
-			map: this.engine.loader.resources["enemy01Texture"].texture
+			transparent:true,
+			map: this.engine.loader.resources["enemy02Texture"].texture
 		});
 	}
 
@@ -26,12 +27,12 @@ var Enemy02 = function() {
 	//     wrapper.add(mesh);
 	// }
 
-	var mesh = new Mesh(new CylinderBufferGeometry(3, 3, 1, 8), Enemy02.material);
+	var mesh = new Mesh(new PlaneBufferGeometry(3, 3, 1, 1), Enemy02.material);
 
 	wrapper.add(mesh);
 
-	wrapper.rotation.x = 90 * (Math.PI / 180);
-	wrapper.rotation.y = -90 * (Math.PI / 180);
+	// wrapper.rotation.x = 90 * (Math.PI / 180);
+	// wrapper.rotation.y = -90 * (Math.PI / 180);
 	wrapper.scale.set(this.size, this.size, this.size);
 
 	this.initPhysics({
