@@ -1,7 +1,6 @@
 import State from "../engine/state";
 import Util from "../util";
 import LevelManager from "../engine/levelmanager";
-import { timingSafeEqual } from "crypto";
 
 var Preload = function() {
 	State.call(this);

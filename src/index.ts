@@ -8,7 +8,7 @@ import Main from "./states/main";
 
 window.onload = function() {
 	setTimeout(function() {
-		window.game = new (function() {
+		window['game'] = new (function() {
 			this.engine = new Engine();
 
 			this.engine.states.add("preload", new Preload());
@@ -19,9 +19,9 @@ window.onload = function() {
 
 		function animate(time) {
 			requestAnimationFrame(animate);
-			window.game.engine.update(time);
+			window['game'].engine.update(time);
 		}
 
-		animate();
+		animate(0);
 	}, 1);
 };

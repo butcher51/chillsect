@@ -7,7 +7,7 @@ const CopyPlugin = require("copy-webpack-plugin")
 module.exports = {
   mode: 'development',
   // mode: 'production',
-  entry: './src/index.js',
+  entry: './src/index.ts',
   output: {
     filename: 'bundle.js',
     path: resolve(__dirname, 'build'),
