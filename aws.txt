@@ -1,9 +1,0 @@
-
-
-
-aws s3 cp dist/bundle.js s3://butchersworkshop.io/chillsect/dist/
-aws s3 cp favicon.ico s3://butchersworkshop.io/chillsect/
-aws s3 cp index.html s3://butchersworkshop.io/chillsect/
-aws s3 cp controlPanel.html s3://butchersworkshop.io/chillsect/
-
-aws s3 cp assets s3://butchersworkshop.io/chillsect/assets/ --recursive

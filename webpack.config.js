@@ -1,41 +1,43 @@
-var webpack = require("webpack");
+const { resolve } = require('path');
 
-const plugins = [];
-
-if (process.argv[1].indexOf('dev') === -1) {
-    plugins.push(
-        new webpack.optimize.UglifyJsPlugin({
-            mangle: {toplevel: true},
-            minimize: true,
-            sourceMap: false,
-        })
-    );
-}
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ProgressBarPlugin = require('progress-bar-webpack-plugin');
+const CopyPlugin = require("copy-webpack-plugin")
 
 module.exports = {
-    entry: "./src/index.js",
-    output: {
-        path: __dirname + "/dist/",
-        publicPath: 'dist/',
-        filename: "bundle.js"
-    },
-    resolve: {
-        unsafeCache: true,
-    },
-    module: {
-        rules: [
-            {
-                test: /\.css$/, use: [{
-                    loader: "style-loader",
-                }, {
-                    loader: "css-loader",
-                }]
-            },
-            {test: /\.(jpg|png|gif)$/, loader: "file-loader"},
-            {test: /\.(glsl)$/, loader: "url-loader"},
-            {test: /\.json$/, loader: "json-loader"},
-            {test: /\.js$/, loader: 'babel-loader', options: {compact: false}}
-        ]
-    },
-    plugins
+  mode: 'development',
+  // mode: 'production',
+  entry: './src/index.js',
+  output: {
+    filename: 'bundle.js',
+    path: resolve(__dirname, 'build'),
+  },
+
+  resolve: {
+    extensions: ['.ts', '.js'],
+  },
+
+  devtool: 'source-map',
+
+  module: {
+    rules: [
+      {
+        test: /\.ts?$/,
+        use: ['ts-loader'],
+      },
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
+      },
+    ],
+  },
+  plugins: [
+    new CopyPlugin({ patterns: [{ from: 'assets', to: 'assets' }] }),
+    new ProgressBarPlugin(),
+    new HtmlWebpackPlugin({
+      template: `${__dirname}/src/index.html`,
+      filename: 'index.html',
+      inject: 'body',
+    }),
+  ],
 };

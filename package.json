@@ -1,15 +1,14 @@
 {
 	"name": "Chillsect",
-	"version": "0.1.0",
+	"version": "1.0.0",
 	"description": "-",
 	"main": "index.js",
 	"scripts": {
-		"webpack": "webpack",
-		"webpack-dev-server": "webpack-dev-server --progress --colors --port 3001",
+		"start": "webpack serve --open",
+		"build": "webpack build",
 		"mapGenerator1": "node utility/mapGenerator1.js",
 		"mapGenerator2": "node utility/mapGenerator2.js",
-		"mapGeneratorUnity": "node mapGeneratorUnity.js",
-		"s3Deploy": "node utility/s3deploy.js"
+		"mapGeneratorUnity": "node mapGeneratorUnity.js"
 	},
 	"repository": {
 		"type": "git",
@@ -20,27 +19,20 @@
 	"homepage": "https://butchersworkshop.io",
 	"dependencies": {
 		"alea": "0.0.9",
-		"babel-core": "6.22.1",
 		"p2": "0.7.1",
-		"three": "0.119.0",
-		"tween.js": "16.3.5",
-		"worker-loader": "0.7.1"
+		"three": "latest",
+		"tween.js": "16.3.5"
 	},
 	"devDependencies": {
-		"babel-loader": "6.2.10",
-		"babel-preset-es2015": "6.22.0",
-		"babel-preset-stage-0": "6.22.0",
-		"child_process": "1.0.2",
-		"css-loader": "0.25.0",
-		"file-loader": "0.9.0",
-		"grunt": "1.0.1",
-		"grunt-cli": "1.2.0",
-		"grunt-sftp-deploy": "0.2.5",
-		"grunt-version": "1.1.1",
-		"json-loader": "0.5.4",
-		"style-loader": "0.13.1",
-		"url-loader": "0.5.7",
-		"webpack": "2.6.1",
-		"webpack-dev-server": "2.4.5"
+		"copy-webpack-plugin": "latest",
+		"css-loader": "latest",
+		"html-webpack-plugin": "latest",
+		"progress-bar-webpack-plugin": "latest",
+		"style-loader": "latest",
+		"ts-loader": "latest",
+		"typescript": "latest",
+		"webpack": "latest",
+		"webpack-cli": "latest",
+		"webpack-dev-server": "latest"
 	}
 }
