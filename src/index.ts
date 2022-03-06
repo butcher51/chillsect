@@ -6,20 +6,29 @@ import Engine from "./engine/engine.js";
 import Preload from "./states/preload";
 import Main from "./states/main";
 
+export class Game {
+
+	public static engine: Engine;
+
+	constructor() {
+
+		Game.engine = new Engine();
+
+		Game.engine.states.add("preload", new Preload());
+		Game.engine.states.add("main", new Main());
+	
+		Game.engine.states.start("preload");
+	}
+
+}
+
 window.onload = function() {
 	setTimeout(function() {
-		window['game'] = new (function() {
-			this.engine = new Engine();
-
-			this.engine.states.add("preload", new Preload());
-			this.engine.states.add("main", new Main());
-
-			this.engine.states.start("preload");
-		})();
+		new Game();
 
 		function animate(time) {
 			requestAnimationFrame(animate);
-			window['game'].engine.update(time);
+			Game.engine.update(time);
 		}
 
 		animate(0);
