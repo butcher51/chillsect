@@ -71,7 +71,7 @@ GatlingGun.prototype.initMuzzleFlash = function() {
 	muzzleFlash.visible = false;
 	muzzleFlash.renderOrder = 2;
 
-	this.ship.warpperObj.children[0].add(muzzleFlash);
+	this.ship.wrapperObj.children[0].add(muzzleFlash);
 
 	this.muzzleFlash = muzzleFlash;
 };

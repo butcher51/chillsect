@@ -16,6 +16,18 @@ export default class GameObject extends Object3D {
         this.state = Game.engine.states.get();
     }
 
+    get children(): Object3D[] {
+        return super.children;
+    }
+
+    set children(x: any[]) {
+        super.children = x;
+    }
+
+    public remove(o) {
+        super.remove(o);
+    }
+
     public enable(): void {
         if (this.visible === true) {
             return;

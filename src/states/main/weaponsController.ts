@@ -1,11 +1,7 @@
-import LaserGun from "./gameObjects/weapons/laserGun"; //0
-import PhaserGun from "./gameObjects/weapons/phaserGun"; //1
-import PlasmaGun from "./gameObjects/weapons/plasmaGun"; //2
-import GatlingGun from "./gameObjects/weapons/gatlingGun"; //3
-import FusionGun from "./gameObjects/weapons/fusionGun"; //4
-
-import Rpg from "./gameObjects/weapons/rpg"; //5
 import { Game } from "../..";
+import LaserGun from "./gameObjects/weapons/laserGun"; //0
+import Rpg from "./gameObjects/weapons/rpg"; //5
+
 
 export default class WeaponsController {
 
@@ -23,15 +19,15 @@ export default class WeaponsController {
 
         this.weapons = [
             new LaserGun(state, 0),
-            new PhaserGun(state, 1),
-            new GatlingGun(state, 2),
-            new PlasmaGun(state, 3),
-            new FusionGun(state, 4)
+            // new PhaserGun(state, 1),
+            // new GatlingGun(state, 2),
+            // new PlasmaGun(state, 3),
+            // new FusionGun(state, 4)
         ];
 
         this.secondaryWeapons = [
-            new Rpg(state, 0),
-            new Rpg(state, 1)
+            // new Rpg(state, 0),
+            // new Rpg(state, 1)
         ];
     }
 

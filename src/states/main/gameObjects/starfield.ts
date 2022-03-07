@@ -29,8 +29,7 @@ export default class StarField extends Mesh implements Updateable {
 
             'mat2 rotation = mat2( cos(QR), -sin(QR),sin(QR), cos(QR));',
 
-            'vec2 cpos = vec2(0,0);',
-            'vec2 cpol = vec2(cameraPosition.x,cameraPosition.y);',
+            'vec2 cpos = vec2(cameraPosition.x,cameraPosition.y);',
 
             'float ratio = resolution.y/resolution.x;',
             'float targetRatio = resolution.x/TARGET_WIDTH;',
@@ -142,8 +141,8 @@ export default class StarField extends Mesh implements Updateable {
 
     public resize(): void {
 
-        super.material.uniforms.resolution.value.x = Game.engine.scene.cameraSize.width;
-        super.material.uniforms.resolution.value.y = Game.engine.scene.cameraSize.height;
+        this.material.uniforms.resolution.value.x = Game.engine.scene.cameraSize.width;
+        this.material.uniforms.resolution.value.y = Game.engine.scene.cameraSize.height;
 
     }
 

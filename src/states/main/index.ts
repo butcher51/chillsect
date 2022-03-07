@@ -50,11 +50,11 @@ export default class Main extends State {
 
     this.initWeapons();
 
-    // this.initLoots();
+     this.initLoots();
 
-    // setTimeout(this.watchPhysics.bind(this), 200);
+    setTimeout(this.watchPhysics.bind(this), 200);
 
-    // setTimeout(this.initPortal.bind(this), 300);
+    setTimeout(this.initPortal.bind(this), 300);
 
     // setTimeout(this.generateWorld.bind(this), 500);
 

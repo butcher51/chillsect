@@ -1,9 +1,9 @@
 import { AdditiveBlending, BufferAttribute, BufferGeometry, Points, ShaderMaterial, Vector3 } from "three";
 
-var ProjectileRenderer = function(weapon) {
-  weapon.size = weapon.size || 32;
 
-  this.weapon = weapon;
+function create(weapon) {
+
+  weapon.size = weapon.size || 32;
 
   var pointCount = weapon.projectileBufferSize;
   var positionsBuffer = new Float32Array(pointCount * 3);
@@ -60,30 +60,35 @@ var ProjectileRenderer = function(weapon) {
     blending: AdditiveBlending
   });
 
-  Points.call(this, geometry, material);
+  return { geometry, material };
+}
 
-  this.frustumCulled = false;
-};
+export default class ProjectileRenderer extends Points {
+  geometry: any;
 
-ProjectileRenderer.prototype = Object.create(Points.prototype);
-ProjectileRenderer.prototype.constructor = ProjectileRenderer;
+  constructor(private weapon) {
+    const { geometry, material } = create(weapon);
+    super(geometry, material);
 
-ProjectileRenderer.prototype.update = function() {
-  var w = this.weapon;
-
-  for (var i = 0, index = 0, p; i < w.projectileBufferSize; i++) {
-    p = w.projectileBuffer[i];
-    if (p.visible) {
-      p.update();
-      index = i * 3;
-      this.geometry.attributes.position.array[index] = p.body.position[0];
-      this.geometry.attributes.position.array[index + 1] = p.body.position[1];
-      this.geometry.attributes.position.array[index + 2] = 0;
-    } else {
-      this.geometry.attributes.position.array[i * 3 + 2] = -3000;
-    }
+    super.frustumCulled = false;
   }
-  this.geometry.attributes.position.needsUpdate = true;
-};
 
-export default ProjectileRenderer;
+  public update(): void {
+    var w = this.weapon;
+
+    for (var i = 0, index = 0, p; i < w.projectileBufferSize; i++) {
+      p = w.projectileBuffer[i];
+      if (p.visible) {
+        p.update();
+        index = i * 3;
+        this.geometry.attributes.position.array[index] = p.body.position[0];
+        this.geometry.attributes.position.array[index + 1] = p.body.position[1];
+        this.geometry.attributes.position.array[index + 2] = 0;
+      } else {
+        this.geometry.attributes.position.array[i * 3 + 2] = -3000;
+      }
+    }
+    this.geometry.attributes.position.needsUpdate = true;
+  }
+}
+

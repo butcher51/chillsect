@@ -87,7 +87,7 @@ PhaserGun.prototype.initMuzzleFlash = function() {
 	muzzleFlash.visible = false;
 	muzzleFlash.renderOrder = 2;
 
-	this.ship.warpperObj.children[0].add(muzzleFlash);
+	this.ship.wrapperObj.children[0].add(muzzleFlash);
 
 	this.muzzleFlash = muzzleFlash;
 
@@ -97,7 +97,7 @@ PhaserGun.prototype.initMuzzleFlash = function() {
 	muzzleFlash2.visible = false;
 	muzzleFlash2.renderOrder = 3;
 
-	this.ship.warpperObj.children[0].add(muzzleFlash2);
+	this.ship.wrapperObj.children[0].add(muzzleFlash2);
 
 	this.muzzleFlash2 = muzzleFlash2;
 };

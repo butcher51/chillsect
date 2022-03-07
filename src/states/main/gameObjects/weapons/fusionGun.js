@@ -123,17 +123,17 @@ FusionGun.prototype.initBeam = function() {
 };
 
 FusionGun.prototype.detachWeapon = function() {
-	this.ship.warpperObj.children[0].remove(this.beamMesh);
-	this.ship.warpperObj.children[0].remove(this.weaponMesh);
-	this.ship.warpperObj.children[0].remove(this.beamStart);
-	this.ship.warpperObj.children[0].remove(this.beamEnd);
+	this.ship.wrapperObj.children[0].remove(this.beamMesh);
+	this.ship.wrapperObj.children[0].remove(this.weaponMesh);
+	this.ship.wrapperObj.children[0].remove(this.beamStart);
+	this.ship.wrapperObj.children[0].remove(this.beamEnd);
 };
 
 FusionGun.prototype.attachWeapon = function() {
-	this.ship.warpperObj.children[0].add(this.beamMesh);
-	this.ship.warpperObj.children[0].add(this.weaponMesh);
-	this.ship.warpperObj.children[0].add(this.beamStart);
-	this.ship.warpperObj.children[0].add(this.beamEnd);
+	this.ship.wrapperObj.children[0].add(this.beamMesh);
+	this.ship.wrapperObj.children[0].add(this.weaponMesh);
+	this.ship.wrapperObj.children[0].add(this.beamStart);
+	this.ship.wrapperObj.children[0].add(this.beamEnd);
 };
 
 FusionGun.prototype.tmpCircleLineIntersectionParams = {
