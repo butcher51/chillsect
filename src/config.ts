@@ -1,8 +1,8 @@
 import { Color } from "three";
 
-var ASSETS_FOLDER = "assets/";
+const ASSETS_FOLDER = "assets/";
 
-var COLLISION_MASK = {
+const COLLISION_MASK = {
   SHIP: Math.pow(2, 1),
   PROJECTILE: Math.pow(2, 2),
   SPACE_OBJECT: Math.pow(2, 3),
@@ -11,11 +11,11 @@ var COLLISION_MASK = {
   STATIC_OBJECT: Math.pow(2, 6)
 };
 
-var PROCEDURAL_BLOCK_SIZE = 10000;
+const PROCEDURAL_BLOCK_SIZE = 10000;
 
-var VIEW_BUFFER_RADIUS = 2000;
+const VIEW_BUFFER_RADIUS = 2000;
 
-var ENERGY_MANAGEMENT = {
+const ENERGY_MANAGEMENT = {
   MOVE_ENERGY_USAGE: 0.0001,
   MIN_VALUE: 0.01,
   ENERGY_MAX_VALUE: 1,
@@ -31,20 +31,20 @@ var ENERGY_MANAGEMENT = {
   POWERUP_ENERGY: 0.25
 };
 
-var CHILLSECT_LEVEL_STATE_KEY = "chillsectLevelState";
+const CHILLSECT_LEVEL_STATE_KEY = "chillsectLevelState";
 
-var LOOTS = {
+const LOOTS = {
   ENERGY: { class: "PowerupEnergy", label: "Instant energy", desc: "" },
   MONEY: { class: "Money", label: "Money", desc: "" }
 };
 
-for (var key in LOOTS) {
+for (const key in LOOTS) {
   if (LOOTS.hasOwnProperty(key)) {
     LOOTS[key].key = key;
   }
 }
 
-var DEBUG_ENEMY_FOLLOW = false;
+const DEBUG_ENEMY_FOLLOW = false;
 
 export default {
   MAX_LEVEL: 2,

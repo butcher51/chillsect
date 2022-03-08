@@ -22,7 +22,7 @@ export default class Main extends State {
 
   public sounds: any;
   public missionController: any;
-  public player: any;
+  public player: Player;
   public weapons: any;
   public loots: any;
   public ship: any;
@@ -50,19 +50,19 @@ export default class Main extends State {
 
     this.initWeapons();
 
-     this.initLoots();
+    this.initLoots();
 
     setTimeout(this.watchPhysics.bind(this), 200);
 
     setTimeout(this.initPortal.bind(this), 300);
 
-    // setTimeout(this.generateWorld.bind(this), 500);
+    setTimeout(this.generateWorld.bind(this), 500);
 
-    // setTimeout(this.addShip.bind(this), 1200);
+    setTimeout(this.addShip.bind(this), 1200);
 
-    // setTimeout(this.initMissionController.bind(this), 3800);
+    setTimeout(this.initMissionController.bind(this), 3800);
 
-    // setTimeout(this.initUI.bind(this), 4000);
+    setTimeout(this.initUI.bind(this), 4000);
   }
 
   public initSounds() {
@@ -94,7 +94,7 @@ export default class Main extends State {
 
   public initUI() {
     this.console = new ShipConsole(this);
-    this.controlPanel = new ControlPanel(this);
+    this.controlPanel = new ControlPanel();
 
     this.weapons.enabled = true;
     this.weapons.set(0);
@@ -111,7 +111,7 @@ export default class Main extends State {
   };
 
   public initParticleSystem() {
-    this.particleSystems = new ParticleSystems(this);
+    this.particleSystems = new ParticleSystems();
   };
 
   public generateWorld() {
@@ -177,7 +177,7 @@ export default class Main extends State {
   };
 
   public initLights() {
-    this.lights = new Lights(this);
+    this.lights = new Lights();
   };
 
   public resize() {
@@ -216,7 +216,6 @@ export default class Main extends State {
     this.particleSystems?.update();
     this.physicsWatcher?.update();
     this.weapons?.update();
-    this.lights?.update();
     this.portal?.update();
 
   }

@@ -43,7 +43,6 @@ export default class GameObject extends Object3D {
 
     public create(): void {
 
-
     };
 
     public update(delta: number): void {
