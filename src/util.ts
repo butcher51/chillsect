@@ -3,7 +3,7 @@ import { vec2 } from 'p2';
 
 var version = '1.02.04';
 
-class Util {
+export default class Util {
   public static circleLineIntersections(circle, line) {
     var a, b, c, d, u1, u2, ret, retP1, retP2, v1, v2;
     v1 = {};

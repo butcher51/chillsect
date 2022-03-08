@@ -18,10 +18,10 @@
 	"license": "",
 	"homepage": "https://butchersworkshop.io",
 	"dependencies": {
+		"@tweenjs/tween.js": "^18.6.4",
 		"alea": "0.0.9",
 		"p2": "0.7.1",
-		"three": "latest",
-		"tween.js": "16.3.5"
+		"three": "latest"
 	},
 	"devDependencies": {
 		"copy-webpack-plugin": "latest",

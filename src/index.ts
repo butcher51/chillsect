@@ -2,7 +2,7 @@
 
 import "./style.css";
 
-import Engine from "./engine/engine.js";
+import Engine from "./engine/engine";
 import Preload from "./states/preload";
 import Main from "./states/main";
 

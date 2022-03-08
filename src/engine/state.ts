@@ -1,6 +1,7 @@
 import { IState } from "../types";
 
 export default class State implements IState {
+    weapons: any[];
 
     public start(params: any): void {
 

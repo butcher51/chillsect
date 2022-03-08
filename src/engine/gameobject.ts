@@ -10,6 +10,7 @@ export default class GameObject extends Object3D {
     public sounds: any = {};
     public position: Position;
     public rotation: Rotation;
+    public scale: Vector3;
 
     constructor() {
         super();

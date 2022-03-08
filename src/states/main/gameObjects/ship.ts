@@ -18,8 +18,7 @@ export default class Ship extends GameObject {
 
 	public shootBlockTimeout = 0.1;
 
-	public energy = CONFIG.ENERGY_MANAGEMENT.ENERGY_MAX_VALUE;
-	public plutonium = CONFIG.ENERGY_MANAGEMENT.PLUTONIUM_MAX_VALUE;
+	public energy = CONFIG.ENERGY_MANAGEMENT.ENERGY_MAX_VALUE;	
 
 	public active = false;
 	public dead = false;

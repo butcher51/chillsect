@@ -1,5 +1,6 @@
 import { Vector3, Vector2, NormalBlending, RepeatWrapping, AdditiveBlending, PointLight } from 'three';
-import TWEEN from 'tween.js';
+
+import TWEEN from '@tweenjs/tween.js';
 import { Game } from '../..';
 import SPE from '../../engine/SPE';
 

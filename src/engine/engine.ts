@@ -15,7 +15,7 @@ import {
   PlaneBufferGeometry
 } from 'three';
 import { World } from 'p2';
-import TWEEN from 'tween.js';
+import TWEEN from '@tweenjs/tween.js';
 import Scene from './Scene';
 import StateManager from './StateManager';
 import Loader from './Loader';
@@ -71,6 +71,8 @@ export default class Engine {
     this.paused = false;
 
     this.i = 0;
+
+    console.log(TWEEN);
   }
 
   public initStats() {

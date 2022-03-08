@@ -1,5 +1,6 @@
 import { AdditiveBlending, Mesh, RepeatWrapping, MeshBasicMaterial, MeshLambertMaterial, Object3D, PlaneBufferGeometry } from "three";
-import TWEEN from "tween.js";
+
+import TWEEN from '@tweenjs/tween.js';
 import GameObject from "../../../engine/gameobject";
 import CONFIG from "../../../config";
 import { Game } from "../../..";

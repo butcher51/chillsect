@@ -54,15 +54,15 @@ export default class Main extends State {
 
     setTimeout(this.watchPhysics.bind(this), 200);
 
-    setTimeout(this.initPortal.bind(this), 300);
+     setTimeout(this.initPortal.bind(this), 300);
 
-    setTimeout(this.generateWorld.bind(this), 500);
+    // setTimeout(this.generateWorld.bind(this), 500);
 
     setTimeout(this.addShip.bind(this), 1200);
 
-    setTimeout(this.initMissionController.bind(this), 3800);
+    // setTimeout(this.initMissionController.bind(this), 3800);
 
-    setTimeout(this.initUI.bind(this), 4000);
+    // setTimeout(this.initUI.bind(this), 4000);
   }
 
   public initSounds() {
