@@ -1,87 +1,82 @@
-import {MeshBasicMaterial, Object3D} from 'three';
+import { MeshBasicMaterial, Object3D } from 'three';
 import Missile from './missile';
 import ParticleSystems from '../../particleSystems';
 import Util from '../../../../util';
+import { Game } from '../../../..';
 
-var Rpg = function (state,weaponIndex) {
+export default class Rpg extends Object3D {
+  public state: any;
+  public ship: any;
+  public lastShootTime: number;
+  public weaponIndex: any;
+  public controlFlags: any;
+  public projectileBuffer: any[];
+  public projectileBufferSize: number;
 
-    Object3D.call(this);
+  constructor(weaponIndex) {
+    super();
 
-    this.engine = state.engine;
-    this.state = state;
+    const state = (this.state = Game.engine.states.get());
     this.ship = state.ship;
     this.weaponIndex = weaponIndex;
-    this.controlFlags = this.engine.controls.getControlFlags();
+    this.controlFlags = Game.engine.controls.getControlFlags();
 
     this.initProjectiles();
+  }
 
-};
+  public projectileIndex = 0;
+  public projectileForce = 20;
 
-Rpg.prototype = Object.create(Object3D.prototype);
-Rpg.prototype.constructor = Rpg;
+  public blockTime = 0.4;
+  public strength = 300; //              1/0.4 * 100      =   250 hp/sec
 
-Rpg.prototype.projectileIndex = 0;
-Rpg.prototype.projectileForce = 20;
+  public projectileLife = 80;
 
-Rpg.prototype.blockTime = 0.4;
-Rpg.prototype.strength = 300;//              1/0.4 * 100      =   250 hp/sec
+  public amount = 99;
 
-Rpg.prototype.projectileLife = 80;
+  public detachWeapon() {}
 
-Rpg.prototype.amount = 99;
+  public attachWeapon() {}
 
-Rpg.prototype.detachWeapon = function () {
-
-};
-
-Rpg.prototype.attachWeapon = function () {
-
-};
-
-Rpg.prototype.shoot = function () {
-
+  public shoot() {
     // if (!(this.ship.energy > CONFIG.ENERGY_MANAGEMENT.MIN_VALUE)) {
     //     return;
     // }
     if (this.amount < 1) {
-        return;
+      return;
     }
 
-    if (this.lastShootTime + this.blockTime > this.engine.time) {
-        return;
+    if (this.lastShootTime + this.blockTime > Game.engine.time) {
+      return;
     }
-    this.lastShootTime = this.engine.time;
+    this.lastShootTime = Game.engine.time;
 
     this.releaseProjectiles();
 
     if (this.state.console) {
-        this.state.console.updateSecondaryWeaponAmount(this.weaponIndex,--this.amount);
+      this.state.console.updateSecondaryWeaponAmount(this.weaponIndex, --this.amount);
     }
+  }
 
-};
-
-Rpg.prototype.releaseProjectiles = function () {
-
+  public releaseProjectiles() {
     this.releaseProjectile();
     this.playShootSound();
     this.releaseSmoke();
+  }
 
-};
-
-Rpg.prototype.releaseSmoke = function () {
+  public releaseSmoke() {
     this.state.particleSystems.asteroidHit(this.ship);
-};
+  }
 
-Rpg.prototype.releaseProjectile = function () {
-
+  public releaseProjectile() {
     var angle = Util.normalizeAngle(this.ship.body.angle);
     var projectile = this.projectileBuffer[this.projectileIndex++];
 
     if (this.projectileIndex >= this.projectileBufferSize) {
-        this.projectileIndex = 0;
+      this.projectileIndex = 0;
     }
 
-    this.setShotPosition(projectile, angle);
+    this.setShotPosition(projectile);
 
     var direction = Util.vectorFromAngle(angle + (this.projectileIndex % 2 === 0 ? 0.2 : -0.2));
 
@@ -97,50 +92,48 @@ Rpg.prototype.releaseProjectile = function () {
     projectile.onShoot();
 
     projectile.visible = true;
+  }
 
-};
-
-Rpg.prototype.setShotPosition = function (projectile) {
-
+  public setShotPosition(projectile) {
     projectile.body.position[0] = this.ship.position.x;
     projectile.body.position[1] = this.ship.position.y;
+  }
 
-};
+  public playShootSound() {
+    this.state.sounds.play('missile1');
+  }
 
-Rpg.prototype.playShootSound = function () {
-    this.state.sounds.play("missile1");
-};
-
-Rpg.prototype.initProjectiles = function () {
-
+  public initProjectiles() {
     var material = new MeshBasicMaterial({
-        color: 0xffffff,
-        map: this.engine.loader.resources['rpgRocketTexture'].texture,
+      color: 0xffffff,
+      map: Game.engine.loader.resources['rpgRocketTexture'].texture
     });
 
-    var geometry = this.engine.loader.resources['rpgRocketModel'].geometry;
+    var geometry = Game.engine.loader.resources['rpgRocketModel'].geometry;
 
     this.projectileBufferSize = 10;
     this.projectileBuffer = [];
 
     for (var i = 0, p; i < this.projectileBufferSize; i++) {
-        p = new Missile(this.engine, geometry, material, ParticleSystems.types.rocketExplosion, this.projectileLife, this.strength);
-        this.engine.add(p);
-        this.projectileBuffer.push(p);
+      p = new Missile(
+        Game.engine,
+        geometry,
+        material,
+        ParticleSystems.types.rocketExplosion,
+        this.projectileLife,
+        this.strength
+      );
+      Game.engine.add(p);
+      this.projectileBuffer.push(p);
     }
+  }
 
-};
-
-Rpg.prototype.update = function () {
-
+  public update() {
     for (var i = 0, p; i < this.projectileBufferSize; i++) {
-        p = this.projectileBuffer[i];
-        if (p.visible) {
-            p.update();
-        }
+      p = this.projectileBuffer[i];
+      if (p.visible) {
+        p.update();
+      }
     }
-
-};
-
-export default  Rpg;
-
+  }
+}
