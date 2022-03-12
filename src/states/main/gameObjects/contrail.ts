@@ -1,4 +1,4 @@
-import { Mesh, AdditiveBlending, Vector3, PlaneBufferGeometry, DoubleSide, BufferAttribute, MeshBasicMaterial, ShaderMaterial, Vector2 } from "three";
+import { Mesh, AdditiveBlending, Vector3, PlaneBufferGeometry, Rotation, Position, DoubleSide, BufferAttribute, MeshBasicMaterial, ShaderMaterial, Vector2 } from "three";
 import { vec2 } from "p2";
 
 
@@ -110,6 +110,8 @@ export default class Contrail extends Mesh {
   public geometry: any;
   public frustumCulled: boolean;
   public renderOrder: number;
+  public position: Position;
+  public rotation: Rotation;
 
   public break = 5;
   public length = 50;
