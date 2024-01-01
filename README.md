@@ -37,3 +37,8 @@ Welcome to the intergalatic space wreck recultivation company!
 Your task is to control the mining operation at sector zcs-723. This is a hostile territory, filled with unidentified alien objects.
 The mininng equipment and resources are limited because zcs-723 is near to the a giant black hole, Gargantua.
 You must use the mined resources to refuel your ship, and expand the mining fleet.
+
+
+Background:
+
+https://www.youtube.com/watch?v=0VO_52LJ268
