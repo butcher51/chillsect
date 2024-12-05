@@ -1,0 +1,511 @@
+
+.ui {
+    padding: 0;
+    margin: 0;
+    z-index: 10;
+    position: absolute;
+    -webkit-transition: top 1s ease;
+    -moz-transition: top 1s ease;
+    -ms-transition: top 1s ease;
+    -o-transition: top 1s ease;
+    transition: top 1s ease;
+    width: 800px;
+    height: 80px;
+    background: url(../assets/images/ui.png) no-repeat;
+    left: 50%;
+    margin-left: -400px;
+}
+
+.ui .energyBar {
+    width: 1px;
+    top: 14px;
+}
+
+.ui .energyBar {
+    position: absolute;
+    background: #0078ff;
+    left: 97px;
+    height: 14px;
+    opacity: 0.6;
+}
+
+.ui .money {
+    position: fixed;
+    right: 0;
+    font-family: 'Orbitron', sans-serif;
+    color: #c5a600;
+    padding: 10px;
+    font-size: 1.3em;
+    text-indent: 30px;
+    background: url(../assets/images/uis.png) no-repeat 0 -219px;
+}
+
+.ui .kyberCrystal {
+    position: fixed;
+    left: 0;
+    font-family: 'Orbitron', sans-serif;
+    color: #c6e5ff;
+    font-size: 1.3em;
+    width: 141px;
+    height: 62px;
+    padding: 10px 10px 0 0;
+    text-align: right;
+    box-sizing: border-box;
+    background: url(../assets/images/kkp.png) no-repeat 0 0;
+}
+
+.ui .weapons {
+    position: absolute;
+    left: 241px;
+    top: 47px;
+    text-align: left;
+    display:flex;
+}
+
+.ui .weapons a span {
+    width: 28px;
+    height: 27px;
+    display: block;
+    background: url(../assets/images/weapons.png) no-repeat 0 28px;
+    font-size:8px;
+    text-indent: 2px;
+    line-height: 12px;
+    color:#bbb;
+}
+
+.ui .weapons a:nth-child(1) {
+    background: url(../assets/images/weapons.png) no-repeat -56px 0;
+}
+
+.ui .weapons a:nth-child(2) {
+    background: url(../assets/images/weapons.png) no-repeat -84px 0;
+}
+
+.ui .weapons a:nth-child(3) {
+    background: url(../assets/images/weapons.png) no-repeat -140px 0;
+}
+
+.ui .weapons a:nth-child(4) {
+    background: url(../assets/images/weapons.png) no-repeat -112px 0;
+}
+
+.ui .weapons a:nth-child(5) {
+    background: url(../assets/images/weapons.png) no-repeat -168px 0;
+}
+
+.ui .weapons a:nth-child(6) {
+    background: url(../assets/images/weapons.png) no-repeat -196px 0;
+}
+
+.ui .weapons a {
+    width: 28px;
+    height: 27px;
+    display: block;
+}
+
+.ui .weapons a.active span {
+    background-position: 0 0;
+}
+
+.ui .weapons a:hover span {
+    background-position: -28px 0;
+}
+
+.ui .secondaryWeapons {
+    width: 200px;
+    position: absolute;
+    left: 419px;
+    top: 47px;
+    text-align: left;
+    display:flex;
+}
+
+.ui .secondaryWeapons a {
+    width: 28px;
+    height: 27px;
+    display: block;
+}
+
+.ui .secondaryWeapons a span {
+    width: 28px;
+    height: 27px;
+    display: block;
+    background: url(../assets/images/weapons.png) no-repeat 0 28px;
+    font-size:8px;
+    text-indent: 2px;
+    line-height: 12px;
+    color:#bbb;
+}
+
+.ui .secondaryWeapons a:nth-child(1) {
+    background: url(../assets/images/weapons.png) no-repeat -196px 0;
+}
+
+.ui .secondaryWeapons a:nth-child(2) {
+    background: url(../assets/images/weapons.png) no-repeat -224px 0;
+}
+
+.ui .secondaryWeapons a:nth-child(3) {
+    background: url(../assets/images/weapons.png) no-repeat -196px 0;
+}
+
+.ui .secondaryWeapons a:nth-child(4) {
+    background: url(../assets/images/weapons.png) no-repeat -196px 0;
+}
+
+.ui .secondaryWeapons a:nth-child(5) {
+    background: url(../assets/images/weapons.png) no-repeat -196px 0;
+}
+
+.ui .secondaryWeapons a.active span {
+    background-position: 0 0;
+}
+
+.ui .secondaryWeapons a:hover span {
+    background-position: -28px 0;
+}
+
+.ui .position {
+    position: absolute;
+    font-size: 10px;
+    color: #9ea537;
+    text-align: center;
+    top: 42px;
+    margin-left: 80px;
+    width: 100%;
+}
+
+.ui .controlPanelBtn {
+    left: 6px;
+    top: 6px;
+    position: absolute;
+    display: block;
+    width: 34px;
+    height: 34px;
+    background: url(../assets/images/uis.png) no-repeat;
+}
+
+.ui .controlPanelBtn.active {
+    background-position: -102px 0;
+}
+
+.ui .controlPanelBtn:hover {
+    background-position: -34px 0;
+}
+
+.ui .controlPanelBtn:active {
+    background-position: -68px 0;
+}
+
+.ui .soundBtn {
+    left: 752px;
+    top: 6px;
+    position: absolute;
+    display: block;
+    width: 34px;
+    height: 34px;
+    background: url(../assets/images/uis.png) no-repeat -34px -34px;
+}
+
+.ui .soundBtn.disabled {
+    background-position: 0 -100px;
+}
+
+#controlPanel {
+    z-index: 5;
+    position: absolute;
+    width: 942px;
+    height: 578px;
+    top: 100px;
+    left: 50%;
+    margin: 0 0 0 -456px;
+    box-sizing: border-box;
+    text-align: left;
+    background: url(../assets/images/cpbg.png) no-repeat;
+}
+
+#controlPanel .header {
+    height: 53px;
+    box-sizing: border-box;
+}
+
+#controlPanel .menu {
+    position: absolute;
+    margin: 15px 0 0 18px;
+    box-sizing: border-box;
+}
+
+#controlPanel .menu a {
+    display: block;
+    float: left;
+    width: 120px;
+    margin: 0 12px 0 0;
+    padding: 3px 0 0 0;
+    height: 38px;
+    text-align: center;
+    line-height: 35px;
+    background: url(../assets/images/cpm.png) no-repeat 0 1px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.1em;
+    color: #a9cdff;
+    text-shadow: 0 0 10px rgba(50, 50, 255, 1);
+}
+
+#controlPanel .menu a.active {
+    color: #ff91a1;
+    text-shadow: 0 0 10px rgba(255, 50, 50, 1);
+}
+
+#controlPanel .menu a:hover, #controlPanel .menu a:active {
+    cursor: default;
+    color: #fff;
+}
+
+#controlPanel .contents {
+    padding: 0;
+    box-sizing: border-box;
+    height: inherit;
+}
+
+#controlPanel .content {
+    padding: 10px 30px 80px 30px;
+    display: none;
+}
+
+#controlPanel .header .close {
+    float: right;
+    display: block;
+    cursor: default;
+    margin: 10px 13px 0 0;
+    width: 30px;
+    height: 27px;
+}
+
+#controlPanel .header .close:hover {
+    background: url(../assets/images/uis.png) no-repeat -136px 0;
+}
+
+#controlPanel .header .close span {
+    display: none;
+}
+
+#controlPanel .header .close:hover {
+    color: #fff;
+}
+
+#controlPanel .content:first-child {
+    display: block;
+}
+
+#controlPanel h3 {
+    margin: 0 0 20px 0;
+}
+
+#controlPanel .block {
+    padding: 0 0 20px 0;
+}
+
+#controlPanel .block:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+#controlPanel .cols:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+#controlPanel .cols div {
+    float: left;
+    width: 200px;
+}
+
+#missionPanel {
+    z-index: 5;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    box-sizing: border-box;
+    text-align: left;
+    color: #5f8cba;
+}
+
+#missionPanel div:nth-child(2) {
+    margin: 5px 0 0 0;
+}
+
+.objective {
+    display: flex;
+    padding: 10px;
+    background: #1c1c1c;
+    justify-content: space-between;
+}
+
+.objective > div {
+    padding: 0 0 0 110px;
+    min-height: 100px;
+    background-repeat: no-repeat;
+}
+
+.objective > div > div:first-child {
+    margin: 0 0 15px 0;
+    font-weight: bold;
+    color: #bbb;
+}
+
+.objective > div > div:nth-child(2) {
+    font-style: italic;
+}
+
+.messageBox {
+    position: absolute;
+    width: 500px;
+    left: 50%;
+    margin: 0 0 0 -250px;
+    box-sizing: border-box;
+    text-align: left;
+
+    z-index: 20;
+
+    -webkit-transition: top 0.5s ease-out;
+    -moz-transition: top 0.5s ease-out;
+    -ms-transition: top 0.5s ease-out;
+    -o-transition: top 0.5s ease-out;
+    transition: top 0.5s ease-out;
+}
+
+.messageBox > div {
+    background: url(../assets/images/mt.png) left top;
+    padding: 20px 50px 10px 20px;
+}
+
+.messageBox .close {
+    cursor: default;
+    width: 30px;
+    height: 30px;
+    display: block;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+
+.messageBox .close:hover {
+    background: url(../assets/images/uis.png) no-repeat -136px 0;
+}
+
+.messageBox .footer {
+    background: url(../assets/images/mb.png) no-repeat left bottom;
+    height: 20px;
+    padding: 0;
+}
+
+.messageBox .title {
+    font-size: 22px;
+    color: #ddd;
+    font-weight: bold;
+    line-height: 30px;
+}
+
+.messageBox > div > div:nth-child(2) {
+    margin-bottom: -10px;
+}
+
+.messageBox .objective {
+    background-color: transparent;
+}
+
+.levelComplete .label {
+    background: url(../assets/images/lvlCmplt.png) no-repeat left top;
+    width: 515px;
+    height: 84px;
+    position: absolute;
+    margin: -47px 0 0 180px;
+}
+
+.levelComplete .label span {
+    display: none;
+}
+
+.levelComplete .wrapper {
+    padding: 25px 100px;
+    margin: 50px 0 0 0;
+}
+
+.levelComplete .wrapper .row {
+    display: flex;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 25px;
+    padding: 15px 0;
+}
+
+.levelComplete .wrapper .row > div {
+    flex-grow: 1;
+}
+
+.levelComplete .wrapper .row > div:first-child {
+    width: 500px;
+    text-indent: 80px;
+}
+
+.levelComplete .wrapper .row > div:nth-child(2) {
+    text-align: right;
+}
+
+#nextLevelBtn {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 35px;
+    color: #009bff;
+    text-align: center;
+    margin-top: 45px;
+    padding: 25px;
+    cursor: pointer;
+    text-shadow: 0 0 20px rgba(0, 0, 255, 1);
+}
+
+#nextLevelBtn > span {
+    cursor: pointer;
+}
+
+#nextLevelBtn:hover {
+    color: #1bc3ff;
+}
+
+.kyberCrystalCollected {
+    background: url(../assets/images/uis.png) no-repeat -180px -3px;
+    color: #0088ff;
+}
+
+.creditCollected {
+    background: url(../assets/images/uis.png) no-repeat 28px -210px;
+    color: #e2c400;
+}
+
+.enemyKilled {
+    background: url(../assets/images/uis.png) no-repeat -180px -130px;
+    color: #58d200;
+}
+
+.objectDestroyed {
+    background: url(../assets/images/uis.png) no-repeat -177px -66px;
+}
+
+#gameEndBtn {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 35px;
+    color: #ff5340;
+    text-align: center;
+    margin-top: 45px;
+    padding: 25px;
+    cursor: pointer;
+    text-shadow: 0 0 20px rgb(229, 5, 31);
+}
+
+#gameEndBtn:hover {
+    color: #ff6b68;
+}
+
+#gameEndBtn > span {
+    cursor: pointer;
+}

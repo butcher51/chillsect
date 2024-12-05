@@ -1,0 +1,32 @@
+{
+	"metadata": {
+		"version": 1,
+		"level": 1
+	},
+	"assets": {
+		"star": "textures/star5.png",
+		"mapByteBuffer": "levels/1.dat"
+	},
+	"buffers": [
+		{
+			"class": "Asteroid",
+			"count": 25
+		},
+		{
+			"class": "Enemy00",
+			"count": 15
+		},
+		{
+			"class": "Enemy01",
+			"count": 10
+		},
+		{
+			"class": "KyberCrystal",
+			"count": 3
+		},
+		{
+			"class": "Enemy02",
+			"count": 10
+		}
+	]
+}
