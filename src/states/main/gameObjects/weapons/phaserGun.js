@@ -1,0 +1,146 @@
+import { AdditiveBlending, Mesh, MeshBasicMaterial, PlaneGeometry, RepeatWrapping } from "three";
+import BasicWeapon from "./laserGun";
+import Projectile from "./projectile";
+import ParticleSystems from "../../particleSystems";
+import ProjectileRenderer from "./projectileRenderer";
+
+var PhaserGun = function(state, weaponIndex) {
+	BasicWeapon.call(this, state, weaponIndex);
+};
+
+PhaserGun.prototype = Object.create(BasicWeapon.prototype);
+PhaserGun.prototype.constructor = PhaserGun;
+
+PhaserGun.prototype.projectileIndex = 0;
+PhaserGun.prototype.projectileForce = 2000;
+
+PhaserGun.prototype.blockTime = 0.15; // TODO UJRA SZÁMOLNI
+PhaserGun.prototype.strength = 15; //                (1/0.4) * 2 * 20        =    100hp/sec
+PhaserGun.prototype.energyUsage = 0.04; //           (1/0.4) * 0.04          =    0.1 energy/sec
+
+PhaserGun.prototype.projectileLife = 60;
+
+PhaserGun.prototype.side = -1;
+PhaserGun.prototype.muzzleFlash = null;
+PhaserGun.prototype.muzzleFlashBlockTime = 0.06;
+
+PhaserGun.prototype.amount = 99;
+
+PhaserGun.prototype.initWeapon = function() {
+	var material = new MeshBasicMaterial({
+		color: 0xffffff,
+		map: this.engine.loader.resources["ship01texture"].texture
+	});
+
+	this.weaponMesh = new Mesh(this.engine.loader.resources["redPlasmaWeaponModel"].geometry, material);
+};
+
+PhaserGun.prototype.shoot = function() {
+	if (this.amount < 1) {
+		this.state.weapons.set(this.weaponIndex - 1);
+		return;
+	}
+	this.shootCommon();
+};
+
+PhaserGun.prototype.initProjectiles = function() {
+	this.projectileBufferSize = 20;
+	this.projectileBuffer = [];
+
+	for (var i = 0; i < this.projectileBufferSize; i++) {
+		this.projectileBuffer.push(new Projectile(this.engine, ParticleSystems.types.redLaserBullet, this.projectileLife, this.strength));
+	}
+
+	this.projectileRender = new ProjectileRenderer({
+		projectileBufferSize: this.projectileBufferSize,
+		projectileBuffer: this.projectileBuffer,
+		texture: this.engine.loader.resources.weaponsTexture.texture,
+		textureCrop: { x: 0.25, y: 1 }
+	});
+	this.projectileRender.position.z = 6;
+
+	this.engine.scene.scene.add(this.projectileRender);
+};
+
+PhaserGun.prototype.initMuzzleFlash = function() {
+	var texture = this.engine.loader.resources.weaponsTexture.texture.clone();
+	texture.needsUpdate = true;
+	texture.offset.x = 0.25;
+	texture.offset.y = 0.75;
+	texture.wrapS = RepeatWrapping;
+	texture.wrapT = RepeatWrapping;
+	texture.repeat.set(0.25, 0.25);
+
+	var material = new MeshBasicMaterial({
+		map: texture,
+		transparent: true,
+		blending: AdditiveBlending
+	});
+
+	var size = this.ship.size;
+
+	var geometry = new PlaneGeometry(40 / size, 70 / size, 1, 1);
+
+	var muzzleFlash = new Mesh(geometry, material);
+	muzzleFlash.rotation.x = -90 * (Math.PI / 180);
+	muzzleFlash.position.set(22 / size, 6 / size, 32 / size);
+	muzzleFlash.visible = false;
+	muzzleFlash.renderOrder = 2;
+
+	this.ship.warpperObj.children[0].add(muzzleFlash);
+
+	this.muzzleFlash = muzzleFlash;
+
+	var muzzleFlash2 = new Mesh(geometry, material);
+	muzzleFlash2.rotation.x = -90 * (Math.PI / 180);
+	muzzleFlash2.position.set(-(22 / size), 6 / size, 32 / size);
+	muzzleFlash2.visible = false;
+	muzzleFlash2.renderOrder = 3;
+
+	this.ship.warpperObj.children[0].add(muzzleFlash2);
+
+	this.muzzleFlash2 = muzzleFlash2;
+};
+
+PhaserGun.prototype.releaseMuzzleFlash = function() {
+	this.muzzleFlash.visible = true;
+	this.muzzleFlash2.visible = true;
+};
+
+PhaserGun.prototype.releaseProjectiles = function(direction, angle) {
+	this.releaseProjectile(direction, angle);
+	this.releaseProjectile(direction, angle);
+};
+
+PhaserGun.prototype.releaseProjectile = function(direction, angle) {
+	var projectile = this.projectileBuffer[this.projectileIndex++];
+
+	if (this.projectileIndex >= this.projectileBufferSize) {
+		this.projectileIndex = 0;
+	}
+
+	projectile.onShoot();
+
+	projectile.body.position[0] = this.ship.position.x + Math.cos(angle + 0.3 * this.side) * 75;
+	projectile.body.position[1] = this.ship.position.y + Math.sin(angle + 0.3 * this.side) * 75;
+
+	projectile.body.velocity[0] = this.ship.body.velocity[0] + Math.cos(angle - 0.01 * this.side) * this.projectileForce;
+	projectile.body.velocity[1] = this.ship.body.velocity[1] + Math.sin(angle - 0.01 * this.side) * this.projectileForce;
+
+	projectile.body.angle = this.ship.body.angle + Math.PI / 2;
+
+	projectile.visible = true;
+
+	this.side *= -1;
+};
+
+PhaserGun.prototype.update = function() {
+	if (this.muzzleFlash.visible === true && this.lastShootTime + this.muzzleFlashBlockTime < this.engine.time) {
+		this.muzzleFlash.visible = false;
+		this.muzzleFlash2.visible = false;
+	}
+
+	this.projectileRender.update();
+};
+
+export default PhaserGun;
