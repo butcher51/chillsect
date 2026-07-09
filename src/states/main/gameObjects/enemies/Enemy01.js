@@ -1,260 +1,260 @@
 import { Audio, MeshBasicMaterial, Object3D } from "three";
 import { vec2 } from "p2";
-import CONFIG from "../../../../config";
-import Util from "../../../../util";
-import AbstractEnemy from "./abstractEnemy";
+import CONFIG from "../../../../config.js";
+import Util from "../../../../util.js";
+import AbstractEnemy from "./AbstractEnemy.js";
 
-var Enemy01 = function() {
-	AbstractEnemy.call(this);
+class Enemy01 extends AbstractEnemy {
 
-	var protoScene = this.engine.loader.resources["enemy01ModelAnim"].scene;
+	accel = 50;
+	angleLerp = 0.3;
 
-	if (!Enemy01.material) {
-		Enemy01.material = new MeshBasicMaterial({
-			color: 0xffffff,
-			map: this.engine.loader.resources["enemy01Texture"].texture
+	speedLimit = 400;
+
+	sightRangeSqr = Math.pow(1200, 2); //mikor lat meg
+	attackRangeSqr = Math.pow(250, 2); //mikor tamad
+	biteRangeSqr = Math.pow(120, 2); //mikor harap (sebez)
+	startRestDistanceSqr = Math.pow(200, 2); //mekkora távon pihen le a startpostól
+
+	//toFarTime = 0;
+	//toFarTimeBlock = 2;
+
+	collisionCheckTime = 0;
+	collisionCheckTimeBlock = 0.5;
+
+	constructor() {
+		super();
+
+		var protoScene = this.engine.loader.resources["enemy01ModelAnim"].scene;
+
+		if (!Enemy01.material) {
+			Enemy01.material = new MeshBasicMaterial({
+				color: 0xffffff,
+				map: this.engine.loader.resources["enemy01Texture"].texture
+			});
+		}
+
+		var wrapper = new Object3D();
+
+		this.add(wrapper);
+
+		var mesh;
+		for (var i = 0, l = protoScene.meshes.length; i < l; i++) {
+			mesh = protoScene.meshes[i].clone();
+			if (protoScene.meshes[i].name == "c3") {
+				mesh.children[0].material = Enemy01.material;
+				mesh.children[1].material = Enemy01.material;
+			}
+			mesh.material = Enemy01.material;
+			wrapper.add(mesh);
+		}
+
+		wrapper.rotation.x = 90 * (Math.PI / 180);
+		wrapper.rotation.y = -90 * (Math.PI / 180);
+
+		wrapper.scale.set(this.size, this.size, this.size);
+
+		this.initPhysics({
+			collisionGroup: CONFIG.COLLISION_MASK.ENEMY,
+			collisionMask: CONFIG.COLLISION_MASK.PROJECTILE | CONFIG.COLLISION_MASK.SHIP | CONFIG.COLLISION_MASK.SPACE_OBJECT | CONFIG.COLLISION_MASK.ENEMY
 		});
+
+		this.moveClip = this.engine.mixer.clipAction(protoScene.animations[0], this);
+		this.attackClip = this.engine.mixer.clipAction(protoScene.animations[1], this);
+
+		//if (CONFIG.DEBUG_ENEMY_FOLLOW) {
+		//var plane = new PlaneBufferGeometry(200, 200, 1, 1);
+		//var material = new MeshBasicMaterial({color: 0xff0000, wireframe: true, opacity: 0.2, transparent: true});
+		//this.targetObject = new Mesh(plane, material);
+		//this.add(this.targetObject);
+		//}
+
+		this.initSounds();
 	}
 
-	var wrapper = new Object3D();
+	initSounds() {
+		if (!Enemy01.sounds) {
+			Enemy01.sounds = {};
+			var hitSound = [];
+			for (var i = 0, sound; i < 4; i++) {
+				sound = new Audio(this.engine.audioListener);
+				sound.setBuffer(this.engine.loader.resources["enemy01HitSound"].buffer);
+				hitSound[i] = sound;
+			}
+			Enemy01.sounds.impact = hitSound;
 
-	this.add(wrapper);
-
-	var mesh;
-	for (var i = 0, l = protoScene.meshes.length; i < l; i++) {
-		mesh = protoScene.meshes[i].clone();
-		if (protoScene.meshes[i].name == "c3") {
-			mesh.children[0].material = Enemy01.material;
-			mesh.children[1].material = Enemy01.material;
-		}
-		mesh.material = Enemy01.material;
-		wrapper.add(mesh);
-	}
-
-	wrapper.rotation.x = 90 * (Math.PI / 180);
-	wrapper.rotation.y = -90 * (Math.PI / 180);
-
-	wrapper.scale.set(this.size, this.size, this.size);
-
-	this.initPhysics({
-		collisionGroup: CONFIG.COLLISION_MASK.ENEMY,
-		collisionMask: CONFIG.COLLISION_MASK.PROJECTILE | CONFIG.COLLISION_MASK.SHIP | CONFIG.COLLISION_MASK.SPACE_OBJECT | CONFIG.COLLISION_MASK.ENEMY
-	});
-
-	this.moveClip = this.engine.mixer.clipAction(protoScene.animations[0], this);
-	this.attackClip = this.engine.mixer.clipAction(protoScene.animations[1], this);
-
-	//if (CONFIG.DEBUG_ENEMY_FOLLOW) {
-	//var plane = new PlaneBufferGeometry(200, 200, 1, 1);
-	//var material = new MeshBasicMaterial({color: 0xff0000, wireframe: true, opacity: 0.2, transparent: true});
-	//this.targetObject = new Mesh(plane, material);
-	//this.add(this.targetObject);
-	//}
-
-	this.initSounds();
-};
-
-Enemy01.prototype = Object.create(AbstractEnemy.prototype);
-Enemy01.prototype.constructor = Enemy01;
-
-Enemy01.prototype.accel = 50;
-Enemy01.prototype.angleLerp = 0.3;
-
-Enemy01.prototype.speedLimit = 400;
-
-Enemy01.prototype.sightRangeSqr = Math.pow(1200, 2); //mikor lat meg
-Enemy01.prototype.attackRangeSqr = Math.pow(250, 2); //mikor tamad
-Enemy01.prototype.biteRangeSqr = Math.pow(120, 2); //mikor harap (sebez)
-Enemy01.prototype.startRestDistanceSqr = Math.pow(200, 2); //mekkora távon pihen le a startpostól
-
-//Enemy01.prototype.toFarTime = 0;
-//Enemy01.prototype.toFarTimeBlock = 2;
-
-Enemy01.prototype.collisionCheckTime = 0;
-Enemy01.prototype.collisionCheckTimeBlock = 0.5;
-
-Enemy01.prototype.initSounds = function() {
-	if (!Enemy01.sounds) {
-		Enemy01.sounds = {};
-		var hitSound = [];
-		for (var i = 0, sound; i < 4; i++) {
 			sound = new Audio(this.engine.audioListener);
-			sound.setBuffer(this.engine.loader.resources["enemy01HitSound"].buffer);
-			hitSound[i] = sound;
+			sound.setBuffer(this.engine.loader.resources["enemy01DeathSound"].buffer);
+			Enemy01.sounds.death = [sound];
 		}
-		Enemy01.sounds.impact = hitSound;
-
-		sound = new Audio(this.engine.audioListener);
-		sound.setBuffer(this.engine.loader.resources["enemy01DeathSound"].buffer);
-		Enemy01.sounds.death = [sound];
+		this.sounds = Enemy01.sounds;
 	}
-	this.sounds = Enemy01.sounds;
-};
 
-Enemy01.prototype.setAleas = function(aleas) {
-	AbstractEnemy.prototype.setAleas.call(this, aleas);
+	setAleas(aleas) {
+		AbstractEnemy.prototype.setAleas.call(this, aleas);
 
-	this.size = 20 + aleas[2] * 10;
-	this.clickSize = (this.size + 100) * (this.size + 100);
+		this.size = 20 + aleas[2] * 10;
+		this.clickSize = (this.size + 100) * (this.size + 100);
 
-	this.hpMax = 80;
+		this.hpMax = 80;
 
-	this.animationState = 0;
+		this.animationState = 0;
 
-	this.moveClip.stop();
-	this.attackClip.stop();
+		this.moveClip.stop();
+		this.attackClip.stop();
 
-	this.body.shapes[0].radius = this.size * 2.25;
-	this.body.shapes[0].updateBoundingRadius();
+		this.body.shapes[0].radius = this.size * 2.25;
+		this.body.shapes[0].updateBoundingRadius();
 
-	this.body.mass = 10;
-	this.body.updateMassProperties();
+		this.body.mass = 10;
+		this.body.updateMassProperties();
 
-	this.children[0].scale.set(this.size, this.size, this.size);
+		this.children[0].scale.set(this.size, this.size, this.size);
 
-	this.children[0].visible = true;
+		this.children[0].visible = true;
 
-	if (this.aleas[4] >= 0) {
-		this.hp = this.aleas[4];
-		this.enable();
-		this.ready();
-	} else {
-		this.hp = -1;
-		this.disable();
-	}
-	//    this.hp = 80;
-};
-
-Enemy01.prototype.loot = function() {
-	setTimeout(() => {
-		if (this.aleas[9] < 0.2) {
-			this.state.loots.spawn(this, CONFIG.LOOTS.ENERGY);
+		if (this.aleas[4] >= 0) {
+			this.hp = this.aleas[4];
+			this.enable();
+			this.ready();
+		} else {
+			this.hp = -1;
+			this.disable();
 		}
-		for (var i = 0, il = 10; i < il; i++) {
-			this.state.loots.spawn(this, CONFIG.LOOTS.MONEY);
+		//    this.hp = 80;
+	}
+
+	loot() {
+		setTimeout(() => {
+			if (this.aleas[9] < 0.2) {
+				this.state.loots.spawn(this, CONFIG.LOOTS.ENERGY);
+			}
+			for (var i = 0, il = 10; i < il; i++) {
+				this.state.loots.spawn(this, CONFIG.LOOTS.MONEY);
+			}
+		}, 100);
+	}
+
+	ready() {
+		AbstractEnemy.prototype.ready.call(this);
+		if (CONFIG.DEBUG_ENEMY_FOLLOW) {
+			this.targetObject.position.x = this.body.position[0];
+			this.targetObject.position.y = this.body.position[1];
 		}
-	}, 100);
-};
-
-Enemy01.prototype.ready = function() {
-	AbstractEnemy.prototype.ready.call(this);
-	if (CONFIG.DEBUG_ENEMY_FOLLOW) {
-		this.targetObject.position.x = this.body.position[0];
-		this.targetObject.position.y = this.body.position[1];
-	}
-};
-
-Enemy01.prototype.update = function() {
-	if (this.visible === false) {
-		return;
 	}
 
-	this.updatePhysics();
+	update() {
+		if (this.visible === false) {
+			return;
+		}
 
-	if (this.hp === -1) {
-		this.state.particleSystems.followExplodeEnemy(this);
-		this.body.velocity[0] *= this.drag;
-		this.body.velocity[1] *= this.drag;
-		this.body.angularVelocity *= this.drag;
-		return;
-	}
+		this.updatePhysics();
 
-	var lerp = 0.06;
-	var shipDistanceSqr = vec2.squaredDistance(this.body.position, this.state.ship.body.position);
-	var startDistanceSqr = vec2.squaredDistance(this.body.position, this.startPosition);
+		if (this.hp === -1) {
+			this.state.particleSystems.followExplodeEnemy(this);
+			this.body.velocity[0] *= this.drag;
+			this.body.velocity[1] *= this.drag;
+			this.body.angularVelocity *= this.drag;
+			return;
+		}
 
-	if (this.state.ship.dead === false && this.state.ship.active === true && this.sightRangeSqr > shipDistanceSqr) {
-		if (this.collisionCheckTime < this.engine.time) {
-			this.target = this.state.ship.body.position;
+		var lerp = 0.06;
+		var shipDistanceSqr = vec2.squaredDistance(this.body.position, this.state.ship.body.position);
+		var startDistanceSqr = vec2.squaredDistance(this.body.position, this.startPosition);
 
-			var vb = this.state.world.children;
-			for (var i = 0, d, o, il = vb.length; i < il; i++) {
-				o = vb[i];
-				if (o.collisionMask !== CONFIG.COLLISION_MASK.SPACE_OBJECT) {
-					continue;
-				}
-				if (o == this) {
-					continue;
-				}
-				if (o.visible === true) {
-					d = Util.distToSegmentSquared(o.body.position, this.body.position, this.target);
-					if (d < o.size * o.size) {
-						this.target = Util.getAvoidPoint(o.body.position, this.body.position, this.target, o.size * 2);
+		if (this.state.ship.dead === false && this.state.ship.active === true && this.sightRangeSqr > shipDistanceSqr) {
+			if (this.collisionCheckTime < this.engine.time) {
+				this.target = this.state.ship.body.position;
+
+				var vb = this.state.world.children;
+				for (var i = 0, d, o, il = vb.length; i < il; i++) {
+					o = vb[i];
+					if (o.collisionMask !== CONFIG.COLLISION_MASK.SPACE_OBJECT) {
+						continue;
+					}
+					if (o == this) {
+						continue;
+					}
+					if (o.visible === true) {
+						d = Util.distToSegmentSquared(o.body.position, this.body.position, this.target);
+						if (d < o.size * o.size) {
+							this.target = Util.getAvoidPoint(o.body.position, this.body.position, this.target, o.size * 2);
+						}
 					}
 				}
-			}
-			this.collisionCheckTime = this.engine.time + this.collisionCheckTimeBlock;
+				this.collisionCheckTime = this.engine.time + this.collisionCheckTimeBlock;
 
-			if (this.animationState === 0) {
-				this.animationState = 1;
-				this.moveClip.play();
-				this.attackClip.play();
+				if (this.animationState === 0) {
+					this.animationState = 1;
+					this.moveClip.play();
+					this.attackClip.play();
+				}
 			}
-		}
 
-		if (this.attackRangeSqr > shipDistanceSqr) {
-			lerp = 0.5;
-			this.body.velocity[0] *= 0.95;
-			this.body.velocity[1] *= 0.95;
-			this.body.angularVelocity *= 0.95;
-			if (this.animationState === 1) {
-				this.animationState = 2;
-				this.attackClip.play();
-			}
-			if (this.biteRangeSqr > shipDistanceSqr) {
-				this.state.ship.collide(CONFIG.ENERGY_MANAGEMENT.SHIP_ATTACK_BY_ENEMY_01);
-				this.body.velocity[0] *= 0.9;
-				this.body.velocity[1] *= 0.9;
+			if (this.attackRangeSqr > shipDistanceSqr) {
+				lerp = 0.5;
+				this.body.velocity[0] *= 0.95;
+				this.body.velocity[1] *= 0.95;
+				this.body.angularVelocity *= 0.95;
+				if (this.animationState === 1) {
+					this.animationState = 2;
+					this.attackClip.play();
+				}
+				if (this.biteRangeSqr > shipDistanceSqr) {
+					this.state.ship.collide(CONFIG.ENERGY_MANAGEMENT.SHIP_ATTACK_BY_ENEMY_01);
+					this.body.velocity[0] *= 0.9;
+					this.body.velocity[1] *= 0.9;
+				}
+			} else {
+				if (this.animationState === 2) {
+					this.animationState = 0;
+					this.attackClip.stop();
+				}
 			}
 		} else {
 			if (this.animationState === 2) {
 				this.animationState = 0;
 				this.attackClip.stop();
 			}
-		}
-	} else {
-		if (this.animationState === 2) {
-			this.animationState = 0;
-			this.attackClip.stop();
-		}
-		this.target = this.startPosition;
+			this.target = this.startPosition;
 
-		if (startDistanceSqr < this.startRestDistanceSqr) {
-			this.target = null;
-			if (this.animationState > 0) {
-				this.animationState = 0;
-				this.moveClip.stop();
+			if (startDistanceSqr < this.startRestDistanceSqr) {
+				this.target = null;
+				if (this.animationState > 0) {
+					this.animationState = 0;
+					this.moveClip.stop();
+				}
 			}
 		}
-	}
 
-	if (this.target) {
-		this.targetCursor[0] += (this.target[0] - this.targetCursor[0]) * lerp;
-		this.targetCursor[1] += (this.target[1] - this.targetCursor[1]) * lerp;
+		if (this.target) {
+			this.targetCursor[0] += (this.target[0] - this.targetCursor[0]) * lerp;
+			this.targetCursor[1] += (this.target[1] - this.targetCursor[1]) * lerp;
 
-		if (CONFIG.DEBUG_ENEMY_FOLLOW) {
-			this.targetObject.position.x = this.targetCursor[0];
-			this.targetObject.position.y = this.targetCursor[1];
+			if (CONFIG.DEBUG_ENEMY_FOLLOW) {
+				this.targetObject.position.x = this.targetCursor[0];
+				this.targetObject.position.y = this.targetCursor[1];
+			}
+
+			this.body.angle = Util.angleToRad(
+				Util.lerpAngle(Util.radToAngle(this.body.angle), Util.radToAngle(Util.v2ToRad(this.targetCursor[0] - this.body.position[0], this.targetCursor[1] - this.body.position[1])), this.angleLerp)
+			);
+
+			this.body.velocity[0] += Math.cos(this.body.angle) * this.accel;
+			this.body.velocity[1] += Math.sin(this.body.angle) * this.accel;
+
+			var speedLimit = this.speedLimit; // + (Math.sin((this.engine.time + this.id) * 0.5) * 100);
+			if (vec2.squaredLength(this.body.velocity) > speedLimit * speedLimit) {
+				vec2.normalize(this.body.velocity, this.body.velocity);
+				this.body.velocity[0] *= speedLimit;
+				this.body.velocity[1] *= speedLimit;
+			}
+		} else {
+			this.body.velocity[0] *= this.drag;
+			this.body.velocity[1] *= this.drag;
+			this.body.angularVelocity *= this.drag;
 		}
-
-		this.body.angle = Util.angleToRad(
-			Util.lerpAngle(Util.radToAngle(this.body.angle), Util.radToAngle(Util.v2ToRad(this.targetCursor[0] - this.body.position[0], this.targetCursor[1] - this.body.position[1])), this.angleLerp)
-		);
-
-		this.body.velocity[0] += Math.cos(this.body.angle) * this.accel;
-		this.body.velocity[1] += Math.sin(this.body.angle) * this.accel;
-
-		var speedLimit = this.speedLimit; // + (Math.sin((this.engine.time + this.id) * 0.5) * 100);
-		if (vec2.squaredLength(this.body.velocity) > speedLimit * speedLimit) {
-			vec2.normalize(this.body.velocity, this.body.velocity);
-			this.body.velocity[0] *= speedLimit;
-			this.body.velocity[1] *= speedLimit;
-		}
-	} else {
-		this.body.velocity[0] *= this.drag;
-		this.body.velocity[1] *= this.drag;
-		this.body.angularVelocity *= this.drag;
 	}
-};
+}
 
 export default Enemy01;

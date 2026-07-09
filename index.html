@@ -5,11 +5,26 @@
 		<title>• • Chillsect • •</title>
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 		<link href="https://fonts.googleapis.com/css?family=Orbitron:700" rel="stylesheet" />
+		<link rel="stylesheet" href="/src/style.css" />
 		<style>
 			body,
 			canvas {
 				padding: 0;
 				margin: 0;
+			}
+			/* The WebGL canvas fills the viewport exactly. Its drawing buffer stays
+			   high-res (set in scene.js), but display size is driven purely by CSS,
+			   so there are no side/edge gaps and no overflow at any devicePixelRatio.
+			   display:block (in normal flow, NOT position:fixed) keeps it painting
+			   behind the positioned UI overlays (#loader, .ui, panels) instead of
+			   covering them. !important defends against inline width/height set
+			   elsewhere. Scoped to `body > canvas` (the renderer's canvas is a direct
+			   child of body) so it does NOT hit the nested <canvas> elements inside
+			   the stats.js FPS panel. */
+			body > canvas {
+				display: block;
+				width: 100vw !important;
+				height: 100vh !important;
 			}
 			body {
 				background: #222222;
@@ -75,11 +90,29 @@
 		</style>
 	</head> 
 	<body oncontextmenu="return false">
-		<div id="loader">Loading bundle...</div>
+		<div id="loader">Loading...</div>
 		<div id="tw">
 			Beta build [v1.1.3].
 			<a href="https://twitter.com/chillsectGame" target="_blank">Please follow @chillsectGame</a>
 		</div>
-		<script type="text/javascript" src="dist/bundle.js?v=1.02.0411" charset="utf-8"></script>
+
+		<!-- UMD libraries with no ES module build: load as classic scripts so they
+		     expose window.p2 / window.TWEEN before the module graph evaluates.
+		     The import map below routes bare "p2"/"tween.js" specifiers to the
+		     ESM shims in /vendor that re-export these globals. -->
+		<script src="/node_modules/p2/build/p2.js" charset="utf-8"></script>
+		<script src="/node_modules/tween.js/src/Tween.js" charset="utf-8"></script>
+
+		<script type="importmap">
+			{
+				"imports": {
+					"three": "/node_modules/three/build/three.module.js",
+					"p2": "/vendor/p2.js",
+					"tween.js": "/vendor/tween.js"
+				}
+			}
+		</script>
+
+		<script type="module" src="/src/index.js"></script>
 	</body>
 </html>

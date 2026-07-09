@@ -1,26 +1,11 @@
-var State = function () {
+class State {
+	start() {}
 
-};
+	stop() {}
 
-State.prototype = {
+	update() {}
 
-    constructor: State,
+	resize() {}
+}
 
-    start: function () {
-
-    },
-
-    stop: function () {
-
-    },
-
-    update: function () {
-
-    },
-
-    resize: function () {
-
-    }
-};
-
-export default  State;
+export default State;

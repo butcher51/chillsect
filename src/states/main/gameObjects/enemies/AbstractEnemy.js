@@ -1,106 +1,105 @@
-import GameObject from '../../../../engine/gameobject';
-import CONFIG from '../../../../config';
+import GameObject from '../../../../engine/gameobject.js';
+import CONFIG from '../../../../config.js';
 
-var AbstractEnemy = function () {
+class AbstractEnemy extends GameObject {
 
-    GameObject.call(this);
+    drag = 0.98;
+    collisionMask = CONFIG.COLLISION_MASK.ENEMY;
+    clickSize = 0;
 
-    this.visible = false;
-    this.targetCursor = [0, 0];
-    this.startPosition = [0, 0];
-    this.target = [0, 0];
-    this.size = 10;
-    this.hp = 10;
-    this.sounds = {};
+    constructor() {
 
-};
+        super();
 
-AbstractEnemy.prototype = Object.create(GameObject.prototype);
-AbstractEnemy.prototype.constructor = AbstractEnemy;
+        this.visible = false;
+        this.targetCursor = [0, 0];
+        this.startPosition = [0, 0];
+        this.target = [0, 0];
+        this.size = 10;
+        this.hp = 10;
+        this.sounds = {};
 
-
-AbstractEnemy.prototype.setAleas = function (aleas) {
-
-    this.aleas = aleas.slice();
-
-};
-
-AbstractEnemy.prototype.drag = 0.98;
-AbstractEnemy.prototype.collisionMask = CONFIG.COLLISION_MASK.ENEMY;
-AbstractEnemy.prototype.clickSize = 0;
-
-AbstractEnemy.prototype.hit = function (gameObject) {
-
-    if (this.hp === -1) {
-        return;
     }
 
-    if (this.hp > 0) {
-        this.hp -= gameObject.strength;
-        if (this.hp < 0) {
-            this.hp = 0;
+    setAleas(aleas) {
+
+        this.aleas = aleas.slice();
+
+    }
+
+    hit(gameObject) {
+
+        if (this.hp === -1) {
+            return;
+        }
+
+        if (this.hp > 0) {
+            this.hp -= gameObject.strength;
+            if (this.hp < 0) {
+                this.hp = 0;
+            }
+        }
+
+        if (this.hp === 0) {
+            this.die();
+            this.loot();
+            this.hp = -1;
+            this.playSound('death');
+        } else {
+            this.state.particleSystems.enemyHit(gameObject);
+            this.playSound('impact');
         }
     }
 
-    if (this.hp === 0) {
-        this.die();
-        this.loot();
-        this.hp = -1;
-        this.playSound('death');
-    } else {
-        this.state.particleSystems.enemyHit(gameObject);
-        this.playSound('impact');
-    }
-};
+    playSound(key) {
 
-AbstractEnemy.prototype.playSound = function (key) {
-
-    if (!this.engine.sound) {
-        return;
-    }
-
-    var s = this.sounds[key];
-    for (var i = 0, l = s.length; i < l; i++) {
-        if (s[i].isPlaying === true) {
-            continue;
-        }
-        s[i].play();
-        return;
-    }
-};
-
-AbstractEnemy.prototype.loot = function () {
-
-    setTimeout(() => {
-        if (this.aleas[9] < 0.2) {
-            this.state.loots.spawn(this, CONFIG.LOOTS.ENERGY);
-        }
-        for (var i = 0, il = parseInt(this.aleas[10] * 10); i < il; i++) {
-            this.state.loots.spawn(this, CONFIG.LOOTS.MONEY);
+        if (!this.engine.sound) {
+            return;
         }
 
-    }, 100);
-
-};
-
-AbstractEnemy.prototype.die = function () {
-
-    this.state.particleSystems.explodeEnemy(this);
-
-    this.disable();
-
-    this.state.player.enemyKilled++;
-
-    if (this.dieRemoveCallback) {
-        this.dieRemoveCallback(this);
+        var s = this.sounds[key];
+        for (var i = 0, l = s.length; i < l; i++) {
+            if (s[i].isPlaying === true) {
+                continue;
+            }
+            s[i].play();
+            return;
+        }
     }
 
-};
+    loot() {
 
-AbstractEnemy.prototype.ready = function () {
+        setTimeout(() => {
+            if (this.aleas[9] < 0.2) {
+                this.state.loots.spawn(this, CONFIG.LOOTS.ENERGY);
+            }
+            for (var i = 0, il = parseInt(this.aleas[10] * 10); i < il; i++) {
+                this.state.loots.spawn(this, CONFIG.LOOTS.MONEY);
+            }
 
-    this.startPosition[0] = this.targetCursor[0] = this.body.position[0];
-    this.startPosition[1] = this.targetCursor[1] = this.body.position[1];
-};
+        }, 100);
+
+    }
+
+    die() {
+
+        this.state.particleSystems.explodeEnemy(this);
+
+        this.disable();
+
+        this.state.player.enemyKilled++;
+
+        if (this.dieRemoveCallback) {
+            this.dieRemoveCallback(this);
+        }
+
+    }
+
+    ready() {
+
+        this.startPosition[0] = this.targetCursor[0] = this.body.position[0];
+        this.startPosition[1] = this.targetCursor[1] = this.body.position[1];
+    }
+}
 
 export default AbstractEnemy;

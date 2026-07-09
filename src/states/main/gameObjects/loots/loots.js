@@ -1,44 +1,43 @@
-import GameObject from "../../../../engine/gameobject";
-import Money from "./money";
-import PowerupEnergy from "./energy";
+import GameObject from "../../../../engine/gameobject.js";
+import Money from "./money.js";
+import PowerupEnergy from "./energy.js";
 
 var classes = {
     Money: Money,
     PowerupEnergy: PowerupEnergy
 };
 
-var Loots = function () {
+class Loots extends GameObject {
+    constructor() {
 
-    GameObject.call(this);
+        super();
 
-};
-
-Loots.prototype = Object.create(GameObject.prototype);
-Loots.prototype.constructor = Loots;
-
-Loots.prototype.spawn = function (gameObject, type, dropOut) {
-
-    var loot = new classes[type.class](type);
-
-    this.add(loot);
-
-    loot.spawn(gameObject, type, dropOut);
-
-    if (this.children.length > 30) {
-        this.children[0].disable();
-        this.remove(this.children[0]);
     }
 
-};
+    spawn(gameObject, type, dropOut) {
 
-Loots.prototype.update = function () {
+        var loot = new classes[type.class](type);
 
-    for (var i = 0, il = this.children.length; i < il; i++) {
-        if (this.children[i].visible === true) {
-            this.children[i].update();
+        this.add(loot);
+
+        loot.spawn(gameObject, type, dropOut);
+
+        if (this.children.length > 30) {
+            this.children[0].disable();
+            this.remove(this.children[0]);
         }
+
     }
 
-};
+    update() {
+
+        for (var i = 0, il = this.children.length; i < il; i++) {
+            if (this.children[i].visible === true) {
+                this.children[i].update();
+            }
+        }
+
+    }
+}
 
 export default Loots;

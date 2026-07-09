@@ -1,30 +1,60 @@
-import CONFIG from '../config';
+import CONFIG from '../config.js';
 import {AudioLoader,NearestFilter,LinearMipMapLinearFilter, BufferGeometryLoader, FileLoader, ImageLoader, ObjectLoader, Texture} from 'three';
 
-var Loader = function (engine) {
+class Loader {
+    constructor(engine) {
 
-    this.engine = engine;
+        this.engine = engine;
 
-    this.resources = {};
+        this.resources = {};
+    }
 
-    this.loadLevel = function (file, callback) {
+    loadLevel(file, callback) {
 
         var this_ = this;
 
-        var xobj = new XMLHttpRequest();
-        xobj.overrideMimeType("application/json");
-        xobj.open('GET', CONFIG.ASSETS_FOLDER + file, true);
-        xobj.onreadystatechange = function () {
-            if (xobj.readyState == 4 && xobj.status == "200") {
-                var json = JSON.parse(xobj.responseText);
-                this_.resources['level'] = {"data": json, "src": CONFIG.ASSETS_FOLDER + file, "loaded": true};
-                callback(json);
+        var url = CONFIG.ASSETS_FOLDER + file;
+
+        var fail = function (why) {
+            // Surface the failure instead of hanging silently on a black screen:
+            // if the level JSON never loads, the callback never fires and preload
+            // stalls forever with no error. Make it visible.
+            var msg = "Failed to load " + url + " — " + why;
+            console.error(msg);
+            var loader = document.getElementById("loader");
+            if (loader) {
+                loader.innerHTML = msg + "<br>Is the server serving the project root? (npm start)";
             }
         };
-        xobj.send(null);
-    };
 
-    this.load = function (resources, loadedCallback) {
+        var xobj = new XMLHttpRequest();
+        xobj.overrideMimeType("application/json");
+        xobj.open('GET', url, true);
+        xobj.onreadystatechange = function () {
+            if (xobj.readyState !== 4) {
+                return;
+            }
+            if (xobj.status === 200 || xobj.status === 0 /* file:// */) {
+                var json;
+                try {
+                    json = JSON.parse(xobj.responseText);
+                } catch (e) {
+                    fail("invalid JSON (" + e.message + ")");
+                    return;
+                }
+                this_.resources['level'] = {"data": json, "src": url, "loaded": true};
+                callback(json);
+            } else {
+                fail("HTTP " + xobj.status);
+            }
+        };
+        xobj.onerror = function () {
+            fail("network error");
+        };
+        xobj.send(null);
+    }
+
+    load(resources, loadedCallback) {
 
         this.loadedCallback = loadedCallback;
 
@@ -114,16 +144,16 @@ var Loader = function (engine) {
             }
         }
         return this;
-    };
+    }
 
-    this.logEvent = function (txt) {
+    logEvent(txt) {
         var loader = document.getElementById("loader");
         if (loader) {
             loader.innerHTML = "Loading asset... " + (this.complete) + "/" + this.sum;
         }
-    };
+    }
 
-    this.isLoaded = function () {
+    isLoaded() {
 
         this.complete++;
 
@@ -142,6 +172,6 @@ var Loader = function (engine) {
 
     }
 
-};
+}
 
 export default  Loader;

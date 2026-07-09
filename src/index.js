@@ -1,10 +1,8 @@
 //console.clear();
 
-import "./style.css";
-
 import Engine from "./engine/engine.js";
-import Preload from "./states/preload";
-import Main from "./states/main";
+import Preload from "./states/preload.js";
+import Main from "./states/main/index.js";
 
 window.onload = function() {
 	setTimeout(function() {

@@ -16,51 +16,52 @@ import {
 } from "three";
 import { World } from "p2";
 import TWEEN from "tween.js";
-import Scene from "./Scene";
-import StateManager from "./StateManager";
-import Loader from "./Loader";
-import Controls from "./Controls";
+import Scene from "./scene.js";
+import StateManager from "./statemanager.js";
+import Loader from "./loader.js";
+import Controls from "./controls.js";
 import Stats from "./stats.min.js";
 
-var Engine = function() {
-  this.scene = new Scene();
+class Engine {
+  fixedTimeStep = 1 / 60;
+  delta = undefined;
+  time = undefined;
+  lastTime = undefined;
 
-  this.states = new StateManager(this);
-  this.loader = new Loader(this);
-  this.controls = new Controls(this);
+  constructor() {
+    this.scene = new Scene();
 
-  this.mixer = new AnimationMixer(this.scene);
+    this.states = new StateManager(this);
+    this.loader = new Loader(this);
+    this.controls = new Controls(this);
 
-  this.audioListener = new AudioListener();
-  this.scene.camera.add(this.audioListener);
+    this.mixer = new AnimationMixer(this.scene);
 
-  this.world = new World();
-  this.world.applyGravity = false;
-  this.world.applySpringForces = false;
-  this.world.applyDamping = false;
-  this.world.solver.iterations = 1;
+    this.audioListener = new AudioListener();
+    this.scene.camera.add(this.audioListener);
 
-  this.root = new Object3D();
-  this.scene.scene.add(this.root);
+    this.world = new World();
+    this.world.applyGravity = false;
+    this.world.applySpringForces = false;
+    this.world.applyDamping = false;
+    this.world.solver.iterations = 1;
 
-  this.sound = true;
+    this.root = new Object3D();
+    this.scene.scene.add(this.root);
 
-  window.addEventListener("resize", () => {
-    this.scene.resize();
-    this.states.resize();
-  });
+    this.sound = true;
 
-  this.paused = false;
+    window.addEventListener("resize", () => {
+      this.scene.resize();
+      this.states.resize();
+    });
 
-  this.i = 0;
-};
+    this.paused = false;
 
-Engine.prototype = {
-  fixedTimeStep: 1 / 60,
-  delta: undefined,
-  time: undefined,
-  lastTime: undefined,
-  initStats: function() {
+    this.i = 0;
+  }
+
+  initStats() {
     this.stats = new Stats();
     this.stats.showPanel(1);
     document.body.appendChild(this.stats.domElement);
@@ -70,8 +71,9 @@ Engine.prototype = {
     this.stats.domElement.style.right = "0px";
     this.stats.domElement.style.top = "";
     this.stats.domElement.style.bottom = "0px";
-  },
-  reset: function() {
+  }
+
+  reset() {
     delete this.world;
     this.world = new World();
     this.world.applyGravity = false;
@@ -85,20 +87,25 @@ Engine.prototype = {
 
     this.root = new Object3D();
     this.scene.scene.add(this.root);
-  },
-  add: function(gameObject) {
+  }
+
+  add(gameObject) {
     this.root.add(gameObject);
-  },
-  remove: function(gameObject) {
+  }
+
+  remove(gameObject) {
     this.root.remove(gameObject);
-  },
-  pause: function() {
+  }
+
+  pause() {
     this.paused = true;
-  },
-  resume: function() {
+  }
+
+  resume() {
     this.paused = false;
-  },
-  update: function(time) {
+  }
+
+  update(time) {
     if (this.paused === true) {
       return;
     }
@@ -126,6 +133,6 @@ Engine.prototype = {
 
     if (this.stats) this.stats.end();
   }
-};
+}
 
 export default Engine;

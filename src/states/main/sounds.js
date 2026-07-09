@@ -1,91 +1,91 @@
 import { Audio } from "three";
 
-var Sounds = function(state) {
-	this.state = state;
-	this.engine = state.engine;
+class Sounds {
+	sounds = {};
 
-	var warning1 = new Audio(this.engine.audioListener);
-	warning1.setBuffer(this.engine.loader.resources["warning1Sound"].buffer);
+	constructor(state) {
+		this.state = state;
+		this.engine = state.engine;
 
-	this.sounds.warning1 = [warning1];
+		var warning1 = new Audio(this.engine.audioListener);
+		warning1.setBuffer(this.engine.loader.resources["warning1Sound"].buffer);
 
-	var clickSound = new Audio(this.engine.audioListener);
-	clickSound.setBuffer(this.engine.loader.resources["clickSound"].buffer);
+		this.sounds.warning1 = [warning1];
 
-	this.sounds.click = [clickSound];
+		var clickSound = new Audio(this.engine.audioListener);
+		clickSound.setBuffer(this.engine.loader.resources["clickSound"].buffer);
 
-	var portalSound = new Audio(this.engine.audioListener);
-	portalSound.setBuffer(this.engine.loader.resources["portalSound"].buffer);
+		this.sounds.click = [clickSound];
 
-	this.sounds.portal = [portalSound];
+		var portalSound = new Audio(this.engine.audioListener);
+		portalSound.setBuffer(this.engine.loader.resources["portalSound"].buffer);
 
-	var powerupSound = [];
-	for (var i = 0; i < 3; i++) {
-		var sound = new Audio(this.engine.audioListener);
-		sound.setBuffer(this.engine.loader.resources["powerup1Sound"].buffer);
-		powerupSound[i] = sound;
-	}
+		this.sounds.portal = [portalSound];
 
-	this.sounds.powerup = powerupSound;
-
-	var pickupSound = [];
-	for (var i = 0; i < 5; i++) {
-		var sound = new Audio(this.engine.audioListener);
-		sound.setBuffer(this.engine.loader.resources["powerup2Sound"].buffer);
-		pickupSound[i] = sound;
-	}
-	this.sounds.pickup = pickupSound;
-
-	var basicWeaponSound = [];
-	for (var i = 0; i < 10; i++) {
-		var sound = new Audio(this.engine.audioListener);
-		sound.setBuffer(this.engine.loader.resources["basicWeaponSound"].buffer);
-		basicWeaponSound[i] = sound;
-	}
-	this.sounds.basicWeapon = basicWeaponSound;
-
-	var impactSounds = [];
-	for (i = 0; i < 5; i++) {
-		sound = new Audio(this.engine.audioListener);
-		sound.setBuffer(this.engine.loader.resources["asteroidImpact1Sound"].buffer);
-		impactSounds[i] = sound;
-	}
-	this.sounds.impact = impactSounds;
-
-	var explodeSounds = [];
-	for (i = 0; i < 2; i++) {
-		sound = new Audio(this.engine.audioListener);
-		sound.setBuffer(this.engine.loader.resources["asteroidExplode1Sound"].buffer);
-		explodeSounds[i] = sound;
-	}
-	this.sounds.explode = explodeSounds;
-
-	var missile1Sounds = [];
-	for (i = 0; i < 8; i++) {
-		sound = new Audio(this.engine.audioListener);
-		sound.setBuffer(this.engine.loader.resources["missile1Sound"].buffer);
-		missile1Sounds[i] = sound;
-	}
-	this.sounds.missile1 = missile1Sounds;
-};
-
-Sounds.prototype.constructor = Sounds;
-
-Sounds.prototype.sounds = {};
-
-Sounds.prototype.play = function(key) {
-	if (!this.engine.sound) {
-		return;
-	}
-
-	var s = this.sounds[key];
-	for (var i = 0, l = s.length; i < l; i++) {
-		if (s[i].isPlaying === true) {
-			continue;
+		var powerupSound = [];
+		for (var i = 0; i < 3; i++) {
+			var sound = new Audio(this.engine.audioListener);
+			sound.setBuffer(this.engine.loader.resources["powerup1Sound"].buffer);
+			powerupSound[i] = sound;
 		}
-		s[i].play();
-		return;
+
+		this.sounds.powerup = powerupSound;
+
+		var pickupSound = [];
+		for (var i = 0; i < 5; i++) {
+			var sound = new Audio(this.engine.audioListener);
+			sound.setBuffer(this.engine.loader.resources["powerup2Sound"].buffer);
+			pickupSound[i] = sound;
+		}
+		this.sounds.pickup = pickupSound;
+
+		var basicWeaponSound = [];
+		for (var i = 0; i < 10; i++) {
+			var sound = new Audio(this.engine.audioListener);
+			sound.setBuffer(this.engine.loader.resources["basicWeaponSound"].buffer);
+			basicWeaponSound[i] = sound;
+		}
+		this.sounds.basicWeapon = basicWeaponSound;
+
+		var impactSounds = [];
+		for (i = 0; i < 5; i++) {
+			sound = new Audio(this.engine.audioListener);
+			sound.setBuffer(this.engine.loader.resources["asteroidImpact1Sound"].buffer);
+			impactSounds[i] = sound;
+		}
+		this.sounds.impact = impactSounds;
+
+		var explodeSounds = [];
+		for (i = 0; i < 2; i++) {
+			sound = new Audio(this.engine.audioListener);
+			sound.setBuffer(this.engine.loader.resources["asteroidExplode1Sound"].buffer);
+			explodeSounds[i] = sound;
+		}
+		this.sounds.explode = explodeSounds;
+
+		var missile1Sounds = [];
+		for (i = 0; i < 8; i++) {
+			sound = new Audio(this.engine.audioListener);
+			sound.setBuffer(this.engine.loader.resources["missile1Sound"].buffer);
+			missile1Sounds[i] = sound;
+		}
+		this.sounds.missile1 = missile1Sounds;
 	}
-};
+
+	play(key) {
+		if (!this.engine.sound) {
+			return;
+		}
+
+		var s = this.sounds[key];
+		for (var i = 0, l = s.length; i < l; i++) {
+			if (s[i].isPlaying === true) {
+				continue;
+			}
+			s[i].play();
+			return;
+		}
+	}
+}
 
 export default Sounds;

@@ -1,99 +1,99 @@
-import LaserGun from "./gameObjects/weapons/laserGun"; //0
-import PhaserGun from "./gameObjects/weapons/phaserGun"; //1
-import PlasmaGun from "./gameObjects/weapons/plasmaGun"; //2
-import GatlingGun from "./gameObjects/weapons/gatlingGun"; //3
-import FusionGun from "./gameObjects/weapons/fusionGun"; //4
+import LaserGun from "./gameObjects/weapons/laserGun.js"; //0
+import PhaserGun from "./gameObjects/weapons/phaserGun.js"; //1
+import PlasmaGun from "./gameObjects/weapons/plasmaGun.js"; //2
+import GatlingGun from "./gameObjects/weapons/gatlingGun.js"; //3
+import FusionGun from "./gameObjects/weapons/fusionGun.js"; //4
 
-import Rpg from "./gameObjects/weapons/rpg"; //5
+import Rpg from "./gameObjects/weapons/rpg.js"; //5
 
-var WeaponsController = function (state) {
+class WeaponsController {
+    enabled = false;
+    weapons = null;
+    secondaryWeapons = null;
 
-    this.state = state;
-    this.engine = state.engine;
+    weapon = null;
+    secondaryWeapon = null;
 
-    this.controlFlags = this.engine.controls.getControlFlags();
+    constructor(state) {
 
-    this.weapons = [
-        new LaserGun(state,0),
-        new PhaserGun(state,1),
-        new GatlingGun(state,2),
-        new PlasmaGun(state,3),
-        new FusionGun(state,4)
-    ];
+        this.state = state;
+        this.engine = state.engine;
 
-    this.secondaryWeapons = [
-        new Rpg(state, 0),
-        new Rpg(state, 1)
-    ];
+        this.controlFlags = this.engine.controls.getControlFlags();
 
-};
+        this.weapons = [
+            new LaserGun(state,0),
+            new PhaserGun(state,1),
+            new GatlingGun(state,2),
+            new PlasmaGun(state,3),
+            new FusionGun(state,4)
+        ];
 
-WeaponsController.prototype.constructor = WeaponsController;
+        this.secondaryWeapons = [
+            new Rpg(state, 0),
+            new Rpg(state, 1)
+        ];
 
-WeaponsController.prototype.enabled = false;
-WeaponsController.prototype.weapons = null;
-WeaponsController.prototype.secondaryWeapons = null;
-
-WeaponsController.prototype.weapon = null;
-WeaponsController.prototype.secondaryWeapon = null;
-
-WeaponsController.prototype.set = function (index) {
-
-    if (!this.weapons[index]) {
-        return;
-    }
-    if (this.weapon) {
-        this.weapon.detachWeapon();
-    }
-    this.weapon = this.weapons[index];
-    this.weapon.attachWeapon();
-
-    if (this.state.console) {
-        this.state.console.renderWeapons(index);
     }
 
-    this.state.sounds.play('powerup');
+    set(index) {
 
-};
+        if (!this.weapons[index]) {
+            return;
+        }
+        if (this.weapon) {
+            this.weapon.detachWeapon();
+        }
+        this.weapon = this.weapons[index];
+        this.weapon.attachWeapon();
 
-WeaponsController.prototype.setSecondary = function (index) {
-    if (!this.secondaryWeapons[index]) {
-        return;
-    }
-    if (this.secondaryWeapon) {
-        this.secondaryWeapon.detachWeapon();
-    }
-    this.secondaryWeapon = this.secondaryWeapons[index];
-    this.secondaryWeapon.attachWeapon();
+        if (this.state.console) {
+            this.state.console.renderWeapons(index);
+        }
 
-    if (this.state.console) {
-        this.state.console.renderSecondaryWeapons(index);
-    }
+        this.state.sounds.play('powerup');
 
-    this.state.sounds.play('powerup');
-};
-
-WeaponsController.prototype.shoot = function (target) {
-    if (this.weapon !== null && this.enabled === true) {
-        this.weapon.shoot(target);
-    }
-};
-
-WeaponsController.prototype.shootSecondary = function (target) {
-    if (this.secondaryWeapon !== null && this.enabled === true) {
-        this.secondaryWeapon.shoot(target);
-    }
-};
-
-WeaponsController.prototype.update = function () {
-
-    for (var i = 0, l = this.weapons.length; i < l; i++) {
-        this.weapons[i].update();
-    }
-    for (i = 0, l = this.secondaryWeapons.length; i < l; i++) {
-        this.secondaryWeapons[i].update();
     }
 
-};
+    setSecondary(index) {
+        if (!this.secondaryWeapons[index]) {
+            return;
+        }
+        if (this.secondaryWeapon) {
+            this.secondaryWeapon.detachWeapon();
+        }
+        this.secondaryWeapon = this.secondaryWeapons[index];
+        this.secondaryWeapon.attachWeapon();
+
+        if (this.state.console) {
+            this.state.console.renderSecondaryWeapons(index);
+        }
+
+        this.state.sounds.play('powerup');
+    }
+
+    shoot(target) {
+        if (this.weapon !== null && this.enabled === true) {
+            this.weapon.shoot(target);
+        }
+    }
+
+    shootSecondary(target) {
+        if (this.secondaryWeapon !== null && this.enabled === true) {
+            this.secondaryWeapon.shoot(target);
+        }
+    }
+
+    update() {
+
+        for (var i = 0, l = this.weapons.length; i < l; i++) {
+            this.weapons[i].update();
+        }
+        for (i = 0, l = this.secondaryWeapons.length; i < l; i++) {
+            this.secondaryWeapons[i].update();
+        }
+
+    }
+}
 
 export default WeaponsController;

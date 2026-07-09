@@ -1,6 +1,6 @@
 import { Plane, Raycaster, Vector3 } from "three";
 
-import getCameraSize from "./getCameraSize";
+import getCameraSize from "./getCameraSize.js";
 
 var Controls = function(engine) {
 	this.engine = engine;

@@ -1,64 +1,65 @@
 import {Body, Circle} from "p2";
-import CONFIG from "../../../../config";
+import CONFIG from "../../../../config.js";
 
-var Projectile = function (engine, hitParticleSysType, life, strength) {
+class Projectile {
 
-    this.engine = engine;
+    constructor(engine, hitParticleSysType, life, strength) {
 
-    this.hitParticleSysType = hitParticleSysType;
+        this.engine = engine;
 
-    this.body = new Body({
-        mass: 0.25,//strength / 5,
-        position: [0, 0]
-    });
+        this.hitParticleSysType = hitParticleSysType;
 
-    this.body.addShape(new Circle({
-        radius: 20,
-        collisionGroup: CONFIG.COLLISION_MASK.PROJECTILE,
-        collisionMask: CONFIG.COLLISION_MASK.SPACE_OBJECT | CONFIG.COLLISION_MASK.ENEMY
-    }));
+        this.body = new Body({
+            mass: 0.25,//strength / 5,
+            position: [0, 0]
+        });
 
-    this.body.gameObject = this;
+        this.body.addShape(new Circle({
+            radius: 20,
+            collisionGroup: CONFIG.COLLISION_MASK.PROJECTILE,
+            collisionMask: CONFIG.COLLISION_MASK.SPACE_OBJECT | CONFIG.COLLISION_MASK.ENEMY
+        }));
 
-    this.visible = false;
-    this.renderOrder = 2;
-    this.life = 0;
-    this.endOfLife = life;
-    this.strength = strength;
+        this.body.gameObject = this;
 
-};
+        this.visible = false;
+        this.renderOrder = 2;
+        this.life = 0;
+        this.endOfLife = life;
+        this.strength = strength;
 
-Projectile.prototype.constructor = Projectile;
-
-Projectile.prototype.die = function () {
-
-    this.life = -1;
-    this.visible = false;
-
-    var that = this;
-    setTimeout(function () {
-        that.engine.world.removeBody(that.body);
-    }, 16);
-
-};
-
-Projectile.prototype.onShoot = function () {
-    this.life = 0;
-    this.visible = true;
-    this.engine.world.addBody(this.body);
-};
-
-Projectile.prototype.update = function () {
-
-    if (this.life === -1) {
-        return;
     }
-    if (this.life > this.endOfLife) {
-        this.die();
-        return;
-    }
-    this.life++;
 
-};
+    die() {
+
+        this.life = -1;
+        this.visible = false;
+
+        var that = this;
+        setTimeout(function () {
+            that.engine.world.removeBody(that.body);
+        }, 16);
+
+    }
+
+    onShoot() {
+        this.life = 0;
+        this.visible = true;
+        this.engine.world.addBody(this.body);
+    }
+
+    update() {
+
+        if (this.life === -1) {
+            return;
+        }
+        if (this.life > this.endOfLife) {
+            this.die();
+            return;
+        }
+        this.life++;
+
+    }
+}
 
 export default Projectile;

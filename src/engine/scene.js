@@ -1,6 +1,6 @@
 import { Scene, OrthographicCamera, WebGL1Renderer, Vector3 } from "three";
 
-import getCameraSize from "./getCameraSize";
+import getCameraSize from "./getCameraSize.js";
 
 var Scene_ = function() {
 	this.scene = new Scene();
@@ -33,7 +33,12 @@ var Scene_ = function() {
 
 	this.renderer.shadowMap.enabled = false;
 
-	this.renderer.setSize(this.cameraSize.width, this.cameraSize.height);
+	// updateStyle=false: keep the high-res (devicePixelRatio-scaled) drawing
+	// buffer, but do NOT let three write the buffer size onto the canvas'
+	// inline CSS width/height. CSS makes the canvas fill the viewport exactly
+	// (see index.html), which also keeps it aligned with the mouse math in
+	// controls.js that maps against window.innerWidth/innerHeight.
+	this.renderer.setSize(this.cameraSize.width, this.cameraSize.height, false);
 
 	document.body.appendChild(this.renderer.domElement);
 
@@ -42,7 +47,7 @@ var Scene_ = function() {
 		this.cameraSize = getCameraSize();
 
 		this.cameraFactor = 2; //this.cameraSize.height / this.factorDiv;
-		this.renderer.setSize(this.cameraSize.width, this.cameraSize.height);
+		this.renderer.setSize(this.cameraSize.width, this.cameraSize.height, false);
 		this.camera.left = -this.cameraSize.width / this.cameraFactor;
 		this.camera.right = this.cameraSize.width / this.cameraFactor;
 		this.camera.top = this.cameraSize.height / this.cameraFactor;

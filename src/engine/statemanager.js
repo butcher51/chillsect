@@ -1,23 +1,25 @@
-var StateManager = function (engine) {
+class StateManager {
+    constructor(engine) {
 
-    this.states = {};
-    this.active = null;
+        this.states = {};
+        this.active = null;
 
-    this.engine = engine;
+        this.engine = engine;
+    }
 
-    this.add = function (key, state) {
+    add(key, state) {
         state.engine = this.engine;
         this.states[key] = state;
-    };
+    }
 
-    this.get = function (key) {
+    get(key) {
         if (!key && !this.states[key]) {
             return this.states[this.active];
         }
         return this.states[key];
-    };
+    }
 
-    this.start = function (key, params) {
+    start(key, params) {
         if (this.active) {
             this.states[this.active].stop();
             this.active = null;
@@ -28,18 +30,18 @@ var StateManager = function (engine) {
             return;
         }
         this.states[key].start(params);
-    };
+    }
 
-    this.update = function () {
+    update() {
         if (this.active) {
             this.states[this.active].update();
         }
-    };
+    }
 
-    this.resize = function () {
+    resize() {
         if (this.active) {
             this.states[this.active].resize();
         }
     }
-};
+}
 export default StateManager;
